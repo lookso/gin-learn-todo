@@ -1,4 +1,4 @@
-module gin-learn
+module gin-sourcecode-learn
 
 go 1.12
 

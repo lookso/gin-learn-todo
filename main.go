@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gin-learn/middleware"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -16,15 +16,23 @@ func Success(data interface{}, c *gin.Context) {
 	c.JSON(http.StatusOK, &Error{Code: 0, ErrMsg: "success", Data: data})
 	c.Abort()
 }
-func UserList(c *gin.Context) {
+func UserInfo(c *gin.Context) {
 	data := map[string]string{"name": "jack"}
 	Success(data, c)
 }
-func main() {
-	router := gin.New()
-	router.Use(middleware.Login())
+func InsertUser(c *gin.Context) {
+	data := map[string]string{"name": "jack"}
+	Success(data, c)
+}
 
-	userGroup := router.Group("/user")
-	userGroup.GET("/list", UserList)
-	router.Run(":8989")
+func main() {
+	fmt.Println(gin.GinTest())
+	//router := gin.New()
+	//router:=gin.Default()
+	//router.Use(middleware.Login())
+	//
+	//userGroup := router.Group("/user")
+	//userGroup.POST("/create", InsertUser)
+	//userGroup.GET("/detail", UserInfo)
+	//router.Run(":8989")
 }
