@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+
+	"gin-sourcecode-learn/middleware"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -26,13 +27,15 @@ func InsertUser(c *gin.Context) {
 }
 
 func main() {
-	fmt.Println(gin.GinTest())
+	//fmt.Println(gin.GinTest())
 	//router := gin.New()
-	//router:=gin.Default()
-	//router.Use(middleware.Login())
-	//
-	//userGroup := router.Group("/user")
-	//userGroup.POST("/create", InsertUser)
-	//userGroup.GET("/detail", UserInfo)
-	//router.Run(":8989")
+	gin.GinTest()
+
+	router:=gin.Default()
+	router.Use(middleware.Login())
+
+	userGroup := router.Group("/user")
+	userGroup.POST("/create", InsertUser)
+	userGroup.GET("/detail", UserInfo)
+	router.Run(":8989")
 }
