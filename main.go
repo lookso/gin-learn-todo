@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gin-sourcecode-learn/router"
 	"gin-sourcecode-learn/utils"
+	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"os"
@@ -13,9 +14,16 @@ import (
 	"time"
 )
 
-func main() {
+// 参考:https://www.jianshu.com/p/35addb4de300
+// https://studygolang.com/articles/23097
 
-	fmt.Println(utils.GetMinVer(runtime.Version())) // 获取go 当前版本号 // go1.12.9
+func main() {
+	fmt.Println("Gin version", gin.Version)
+
+	goVersion, _ := utils.GetMinVer(runtime.Version())
+	if goVersion > 8 {
+		fmt.Println(runtime.Version()) // 获取go 当前版本号 // go1.12.9
+	}
 	utils.DebugPrint(`the chinese people is nb`)
 
 	engine := router.InitRouter()

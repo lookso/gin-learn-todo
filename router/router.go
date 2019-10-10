@@ -8,14 +8,11 @@ import (
 )
 
 func InitRouter() *gin.Engine {
-	// 模拟一些私人数据
-	var secrets = gin.H{
-		"foo":    gin.H{"email": "foo@bar.com", "phone": "123433"},
-		"austin": gin.H{"email": "austin@example.com", "phone": "666"},
-		"lena":   gin.H{"email": "lena@guapa.com", "phone": "523443"},
-	}
 
 	router := gin.New()
+
+	router.RedirectFixedPath=true
+
 	router.LoadHTMLGlob("./template/*") // html模板
 	// 中间件
 	router.Use(middleware.Login("admin"), gin.Recovery())
@@ -24,11 +21,30 @@ func InitRouter() *gin.Engine {
 	router.GET("view", controller.GetHtml)
 
 	userGroup := router.Group("/user")
+
+	userGroup.Handle("GET", "/test", controller.UserInfo,controller.GetPing)
+
 	userGroup.POST("/create", controller.InsertUser)
 	userGroup.GET("/detail", controller.UserInfo)
 	userGroup.GET("/JSONP?callback=x", controller.GetJsonp)
 
+	// url重定向
+	router.GET("/redirect", func(c *gin.Context) {
+		c.Request.URL.Path = "/test2"
+		router.HandleContext(c)
+	})
+	router.GET("/test2", func(c *gin.Context) {
+		c.JSON(200, gin.H{"hello": "world"})
+	})
+
 	// 路由组使用 gin.BasicAuth() 中间件
+	// 模拟一些私人数据
+	var secrets = gin.H{
+		"foo":    gin.H{"email": "foo@bar.com", "phone": "123433"},
+		"austin": gin.H{"email": "austin@example.com", "phone": "666"},
+		"lena":   gin.H{"email": "lena@guapa.com", "phone": "523443"},
+	}
+
 	// gin.Accounts 是 map[string]string 的一种快捷方式
 	authorized := router.Group("/admin", gin.BasicAuth(gin.Accounts{
 		"foo":    "bar",
