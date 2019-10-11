@@ -250,6 +250,8 @@ func (engine *Engine) addRoute(method, path string, handlers HandlersChain) {
 
 	debugPrintRoute(method, path, handlers)
 	root := engine.trees.get(method)
+	fmt.Println("root method ", method)
+
 	if root == nil {
 		root = new(node)
 		engine.trees = append(engine.trees, methodTree{method: method, root: root})
@@ -453,7 +455,7 @@ func redirectTrailingSlash(c *Context) {
 	if length := len(p); length > 1 && p[length-1] == '/' {
 		req.URL.Path = p[:length-1]
 	}
-	debugPrint("redirecting request %d: %s --> %s", code, p, req.URL.String())
+	debugPrint("redirecting request %d: %s |-|-|--> %s", code, p, req.URL.String())
 	http.Redirect(c.Writer, req, req.URL.String(), code)
 	c.writermem.WriteHeaderNow()
 }
@@ -468,7 +470,7 @@ func redirectFixedPath(c *Context, root *node, trailingSlash bool) bool {
 			code = http.StatusTemporaryRedirect
 		}
 		req.URL.Path = string(fixedPath)
-		debugPrint("redirecting request %d: %s --> %s", code, rPath, req.URL.String())
+		debugPrint("redirecting request %d: %s |--|--> %s", code, rPath, req.URL.String())
 		http.Redirect(c.Writer, req, req.URL.String(), code)
 		c.writermem.WriteHeaderNow()
 		return true

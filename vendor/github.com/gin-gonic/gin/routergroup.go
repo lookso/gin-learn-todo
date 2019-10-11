@@ -5,6 +5,7 @@
 package gin
 
 import (
+	"fmt"
 	"net/http"
 	"path"
 	"regexp"
@@ -207,7 +208,7 @@ func (group *RouterGroup) createStaticHandler(relativePath string, fs http.FileS
 
 func (group *RouterGroup) combineHandlers(handlers HandlersChain) HandlersChain {
 	finalSize := len(group.Handlers) + len(handlers)
-	if finalSize >= int(abortIndex) {
+	if finalSize >= int(abortIndex) { // 最大63
 		panic("too many handlers")
 	}
 	mergedHandlers := make(HandlersChain, finalSize)
@@ -216,7 +217,9 @@ func (group *RouterGroup) combineHandlers(handlers HandlersChain) HandlersChain 
 	return mergedHandlers
 }
 
+// 拼接url
 func (group *RouterGroup) calculateAbsolutePath(relativePath string) string {
+	fmt.Printf("basePath:%s<=>relativePath:%s\n", group.basePath, relativePath)
 	return joinPaths(group.basePath, relativePath)
 }
 

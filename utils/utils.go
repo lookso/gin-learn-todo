@@ -31,3 +31,4 @@ func DebugPrint(format string, values ...interface{}) {
 	fmt.Fprintf(os.Stdout, "[GIN-debug] "+format, values...)
 }
 
+

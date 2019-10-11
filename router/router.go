@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"gin-sourcecode-learn/controller"
 	"gin-sourcecode-learn/middleware"
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func InitRouter() *gin.Engine {
 	router := gin.New()
 
 	router.RedirectFixedPath=true
+	fmt.Println("base path:",router.BasePath())
 
 	router.LoadHTMLGlob("./template/*") // html模板
 	// 中间件
@@ -27,6 +29,8 @@ func InitRouter() *gin.Engine {
 	userGroup.POST("/create", controller.InsertUser)
 	userGroup.GET("/detail", controller.UserInfo)
 	userGroup.GET("/JSONP?callback=x", controller.GetJsonp)
+
+	fmt.Println("userGroup:",userGroup.BasePath())
 
 	// url重定向
 	router.GET("/redirect", func(c *gin.Context) {
@@ -47,7 +51,7 @@ func InitRouter() *gin.Engine {
 
 	// gin.Accounts 是 map[string]string 的一种快捷方式
 	authorized := router.Group("/admin", gin.BasicAuth(gin.Accounts{
-		"foo":    "bar",
+		"foo":    "bar",    //  用户:密码
 		"austin": "1234",
 		"lena":   "hello2",
 		"manu":   "4321",

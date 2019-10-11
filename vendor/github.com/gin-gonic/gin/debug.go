@@ -12,6 +12,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const ginSupportMinGoVer = 8
@@ -30,7 +31,9 @@ func debugPrintRoute(httpMethod, absolutePath string, handlers HandlersChain) {
 		nuHandlers := len(handlers)
 		handlerName := nameOfFunction(handlers.Last())
 		if DebugPrintRouteFunc == nil {
-			debugPrint("%-6s %-25s --> %s (%d handlers)\n", httpMethod, absolutePath, handlerName, nuHandlers)
+			fmt.Println("01-DebugPrintRouteFunc is nil")
+
+			debugPrint("%-6s %-25s |-04-|--> %s (%d handlers)\n", httpMethod, absolutePath, handlerName, nuHandlers)
 		} else {
 			DebugPrintRouteFunc(httpMethod, absolutePath, handlerName, nuHandlers)
 		}
@@ -54,7 +57,7 @@ func debugPrint(format string, values ...interface{}) {
 		if !strings.HasSuffix(format, "\n") {
 			format += "\n"
 		}
-		fmt.Fprintf(os.Stderr, "[GIN-debug] "+format, values...)
+		fmt.Fprintf(os.Stderr, "[GIN-debug ] "+" current Pid "+strconv.Itoa(os.Getpid())+" ["+time.Now().Format("2006-01-02 15:04:05")+"]"+format, values...)
 	}
 }
 
