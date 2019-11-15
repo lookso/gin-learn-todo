@@ -17,7 +17,7 @@ func InitRouter() *gin.Engine {
 
 	router.LoadHTMLGlob("./template/*") // html模板
 	// 中间件
-	router.Use(middleware.Login("admin"), gin.Recovery())
+	router.Use(middleware.Login("admin"), gin.Recovery(),middleware.Cors())
 
 	router.GET("ping", controller.GetPing)
 	router.GET("view", controller.GetHtml)
