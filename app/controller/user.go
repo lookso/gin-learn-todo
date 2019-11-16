@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"gin-sourcecode-learn/utils"
+	"gin-learn-todo/app/utils"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

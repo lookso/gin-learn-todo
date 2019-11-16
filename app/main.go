@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"gin-sourcecode-learn/router"
-	"gin-sourcecode-learn/utils"
+	"gin-learn-todo/app/router"
+	"gin-learn-todo/app/utils"
 	"github.com/gin-gonic/gin"
 	"log"
 	"math"
@@ -22,7 +22,7 @@ import (
 func main() {
 
 	const abortIndex int8 = math.MaxInt8 / 2
-	fmt.Println("最多Handles个数:",abortIndex) // 63
+	fmt.Println("最多Handles个数:", abortIndex) // 63
 
 	fmt.Println("Gin version", gin.Version)
 

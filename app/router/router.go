@@ -2,8 +2,8 @@ package router
 
 import (
 	"fmt"
-	"gin-sourcecode-learn/controller"
-	"gin-sourcecode-learn/middleware"
+	"gin-learn-todo/app/controller"
+	"gin-learn-todo/app/middleware"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
