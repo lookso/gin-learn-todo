@@ -16,7 +16,7 @@ redis:
 
 mysql:
   host:localhost
-  passport:lookfor@Dny8$
+  passport:xxx
   port:3306
   dbname:sns
 
