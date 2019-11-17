@@ -20,6 +20,9 @@ import (
 // https://studygolang.com/articles/23097
 
 func main() {
+	initGin()
+}
+func initGin() {
 
 	const abortIndex int8 = math.MaxInt8 / 2
 	fmt.Println("最多Handles个数:", abortIndex) // 63
