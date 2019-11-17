@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"gin-learn-todo/app/utils"
+	"gin-learn-todo/app/utils/response"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -12,11 +12,11 @@ func DataInfo(c *gin.Context) {
 	time.Sleep(5 * time.Second)
 	data := map[string]string{"name": "jack", "tag": "<br>", "北京时间": time.Now().Format("2006-01-02 15:03:04")}
 
-	utils.Success(data, c)
+	response.Success(data)
 }
 func InsertData(c *gin.Context) {
 	data := map[string]string{"北京时间": time.Now().Format("2006-01-02 15:04:05")}
-	utils.Success(data, c)
+	response.Success(data)
 }
 func task() string {
 	// 用 time.Sleep() 模拟一个长任务。

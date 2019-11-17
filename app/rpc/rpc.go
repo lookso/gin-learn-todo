@@ -20,6 +20,8 @@ func (r *Service)StartRpc() *Service {
 	addr := fmt.Sprintf("%s:%d", GetLocalIP(), r.Port)
 
 	fmt.Printf("addr:", addr+":"+strconv.Itoa(r.Port))
+
+	return &Service{}
 }
 
 // GetLocalIP returns the non loopback local IP of the host

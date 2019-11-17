@@ -9,12 +9,13 @@ package boot
 import (
 	"context"
 	"fmt"
+	"gin-learn-todo/app/conf"
 	"gin-learn-todo/app/router"
 	"gin-learn-todo/app/rpc"
 	"gin-learn-todo/app/utils"
+	"gin-learn-todo/app/utils/log"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"log"
 	"math"
 	"net/http"
 	"os"
@@ -25,7 +26,7 @@ import (
 )
 
 type Server struct {
-	config Config
+	config conf.Config
 
 	logger *zap.SugaredLogger
 	gin    *gin.Engine
@@ -34,9 +35,9 @@ type Server struct {
 }
 
 func New() *Server {
-
+	var cnf conf.Config
 	srv := &Server{
-		//config: cnf,
+		config: cnf,
 	}
 	srv.InitGin()
 	srv.InitLogger()
@@ -53,12 +54,12 @@ func (s *Server) InitRpc() {
 
 func (s *Server) InitLogger() {
 
-	//var err error
+	var err error
 	// 初始化Logger
-	//if s.logger, err = log.New(&s.config.Log); err != nil {
-	//	fmt.Println("config file unmarshal err:", err)
-	//	os.Exit(1)
-	//}
+	if s.logger, err = log.New(&s.config.Log); err != nil {
+		fmt.Println("config file unmarshal err:", err)
+		os.Exit(1)
+	}
 
 	s.logger.Debug("Logger Init Success")
 }
@@ -78,19 +79,19 @@ func (s *Server) InitGin() {
 	s.gin = router.InitRouter()
 
 	//engine.Run(":8989")
-	
+
 	s.http = &http.Server{
-		Addr:              "8989",
+		Addr:              ":8989",
 		Handler:           s.gin,
 		ReadTimeout:       time.Second * 120,
 		ReadHeaderTimeout: time.Second * 10,
 		WriteTimeout:      time.Second * 60,
 	}
-	
+
 	go func() {
 		// 服务连接
 		if err := s.http.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+			s.logger.Fatalf("listen: %s\n", err)
 		}
 	}()
 
@@ -98,12 +99,12 @@ func (s *Server) InitGin() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
-	log.Println("Shutdown Server ...")
+	s.logger.Debug("Shutdown Server ...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := s.http.Shutdown(ctx); err != nil {
-		log.Fatal("Server Shutdown:", err)
+		s.logger.Fatal("Server Shutdown:", err)
 	}
-	log.Println("Server exiting")
+	s.logger.Debug("Server exiting")
 }
