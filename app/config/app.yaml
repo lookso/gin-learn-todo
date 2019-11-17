@@ -1,0 +1,26 @@
+app:    gin-learn-todo
+listen: 9001
+debug:  true
+log:
+  encoding: console
+  output_path:
+    - sugar.log
+    - stdout
+  level: debug
+
+redis:
+  cache:
+    addr: 127.0.0.1:6379
+    password:
+    db: 1
+
+mysql:
+  host:localhost
+  passport:lookfor@Dny8$
+  port:3306
+  dbname:sns
+
+rpc:
+  port: 9002
+
+    

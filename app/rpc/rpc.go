@@ -9,17 +9,16 @@ package rpc
 import (
 	"fmt"
 	"net"
-	"strconv"
 )
 
 type Service struct {
-	Port int
+	Port string
 }
 
-func (r *Service)StartRpc() *Service {
-	addr := fmt.Sprintf("%s:%d", GetLocalIP(), r.Port)
+func (r *Service) StartRpc() *Service {
+	addr := fmt.Sprintf("%s:%s", GetLocalIP(), r.Port)
 
-	fmt.Printf("addr:", addr+":"+strconv.Itoa(r.Port))
+	fmt.Printf("addr:", addr+":"+r.Port)
 
 	return &Service{}
 }

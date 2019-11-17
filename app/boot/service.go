@@ -35,20 +35,17 @@ type Server struct {
 }
 
 func New() *Server {
-	var cnf conf.Config
-	srv := &Server{
-		config: cnf,
-	}
+	var srv Server
+	srv.config.InitConfig()
 	srv.InitGin()
 	srv.InitLogger()
 	srv.InitRpc()
-
-	return srv
+	return &srv
 }
 
 func (s *Server) InitRpc() {
 	rpcSrv := rpc.Service{}
-	rpcSrv.Port = 90
+	rpcSrv.Port = s.config.Rpc.Port
 	rpcSrv.StartRpc()
 }
 
@@ -65,6 +62,7 @@ func (s *Server) InitLogger() {
 }
 
 func (s *Server) InitGin() {
+	fmt.Println(s.config.Listen)
 	const abortIndex int8 = math.MaxInt8 / 2
 	fmt.Println("最多Handles个数:", abortIndex) // 63
 
@@ -74,14 +72,14 @@ func (s *Server) InitGin() {
 	if goVersion > 8 {
 		fmt.Println(runtime.Version()) // 获取go 当前版本号 // go1.12.9
 	}
-	utils.DebugPrint(`the app run port:8989,` + ` the current pid is:` + strconv.Itoa(os.Getpid()))
+	utils.DebugPrint(`the app run port:9001`+ `, the current pid is:` + strconv.Itoa(os.Getpid()))
 
 	s.gin = router.InitRouter()
 
 	//engine.Run(":8989")
 
 	s.http = &http.Server{
-		Addr:              ":8989",
+		Addr:              ":9001",
 		Handler:           s.gin,
 		ReadTimeout:       time.Second * 120,
 		ReadHeaderTimeout: time.Second * 10,

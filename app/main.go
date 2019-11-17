@@ -1,6 +1,8 @@
 package main
 
-import "gin-learn-todo/app/boot"
+import (
+	"gin-learn-todo/app/boot"
+)
 
 // 参考:https://www.jianshu.com/p/35addb4de300
 // https://studygolang.com/articles/23097
@@ -8,4 +10,3 @@ import "gin-learn-todo/app/boot"
 func main() {
 	boot.New()
 }
-
