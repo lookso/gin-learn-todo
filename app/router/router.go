@@ -57,6 +57,8 @@ func InitRouter() *gin.Engine {
 		"manu":   "4321",
 	}))
 
+	// r.LoadHTMLGlob(AppPath + "template/*/*")
+	
 	// /admin/secrets 端点
 	// 触发 "localhost:8080/admin/secrets
 	authorized.GET("/secrets", func(c *gin.Context) {

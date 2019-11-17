@@ -58,7 +58,7 @@ func GetJsonp(c *gin.Context) {
 }
 
 func GetHtml(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.tmpl", gin.H{
+	c.HTML(http.StatusOK, "template/index.tmpl", gin.H{
 		"title": "Go Main Website",
 		"body":  "This is Go Body",
 	})
