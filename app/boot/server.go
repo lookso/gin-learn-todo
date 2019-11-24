@@ -19,7 +19,7 @@ func Init() {
 	}
 
 	// 初始化Logger
-	logger, err := zaplog.New(setting.Conf.LogConfig)
+	logger, err := zap.New(setting.Conf.LogConfig)
 	if err != nil {
 		fmt.Println("config file unmarshal err:", err)
 		os.Exit(1)

@@ -4,7 +4,7 @@
 //@File : zap
 //@Software: GoLand
 //*/
-package zaplog
+package zap
 //
 //import (
 //	"fmt"

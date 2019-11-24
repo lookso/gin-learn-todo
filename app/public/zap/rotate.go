@@ -4,7 +4,7 @@
 @File : rotate
 @Software: GoLand
 */
-package zaplog
+package zap
 
 import (
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"

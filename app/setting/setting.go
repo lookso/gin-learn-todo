@@ -44,10 +44,10 @@ func Init() *tomlConf {
 type tomlConf struct {
 	Title string
 
-	ApiServer *apiServer     `toml:"api_server"`
-	LogConfig *zaplog.Config `toml:"log_config"`
-	Mysql     *Mysql        `toml:"mysql"`
-	Redis     *Redis         `toml:"redis"`
+	ApiServer *apiServer  `toml:"api_server"`
+	LogConfig *zap.Config `toml:"log_config"`
+	Mysql     *Mysql      `toml:"mysql"`
+	Redis     *Redis      `toml:"redis"`
 }
 
 type apiServer struct {

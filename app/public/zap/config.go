@@ -4,7 +4,7 @@
 @File : config
 @Software: GoLand
 */
-package zaplog
+package zap
 
 import (
 	"go.uber.org/zap"
