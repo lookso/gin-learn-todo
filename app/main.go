@@ -1,12 +1,14 @@
+/*
+@Time : 2019-08-31 22:19
+@Author : Tenlu
+@File : api
+@Software: GoLand
+*/
 package main
 
-import (
-	"gin-learn-todo/app/boot"
-)
-
-// 参考:https://www.jianshu.com/p/35addb4de300
-// https://studygolang.com/articles/23097
+import "gin-learn-todo/app/boot"
 
 func main() {
-	boot.New()
+
+	boot.Init()
 }

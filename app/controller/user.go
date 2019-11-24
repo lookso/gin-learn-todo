@@ -1,33 +1,26 @@
-/*
-@Time : 2019-11-17 10:21 
-@Author : Tenlu
-@File : user
-@Software: GoLand
-*/
 package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"time"
+
+	"code.itech8.com/openapi/sns-manager-api/app/helpers/response"
 )
 
-func InsterUser(c *gin.Context) {
+type User struct{}
 
-}
-func BatchInsertUser(c *gin.Context) {
-
-}
-
-func Del(c *gin.Context) {
-
+func (u *User) Register(c *gin.Context) {
+	data := map[string]interface{}{"name": "jack"}
+	response.Success(data, c)
 }
 
-func FindUser(c *gin.Context) {
-	//fmt.Fprintf(os.Stderr, "123")
-	c.JSON(http.StatusOK, time.Now().Format("2006-01-02 15:03:04"))
+func (u *User) Detail(c *gin.Context) {
+	data := map[string]interface{}{"name": "jack"}
+	response.Success(data, c)
 }
 
-func UpdateUser(c *gin.Context) {
-
+func (u *User) Edit(c *gin.Context) {
+	data := map[string]interface{}{"name": "jack"}
+	response.Success(data, c)
 }
+
+
