@@ -6,9 +6,11 @@
 */
 package main
 
-import "gin-learn-todo/app/boot"
+import (
+	"gin-learn-todo/app/boot"
+)
 
 func main() {
-
-	boot.Init()
+	
+	boot.New()
 }
