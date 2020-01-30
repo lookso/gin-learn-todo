@@ -30,6 +30,7 @@ func Init() (db *gorm.DB, err error) {
 	if os.Getenv("ENV") == "dev" {
 		db.LogMode(true)
 	}
+	log.Printf("init mysql success")
 
 	return conn, err
 }

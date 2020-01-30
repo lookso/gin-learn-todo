@@ -19,4 +19,16 @@ addr = "127.0.0.1:6379"
 password = ""
 db = 0
 
+max_active_conns = 30
+max_idle_conns = 5
+idle_timeout_second = 180
+
+pool_size = 30
+dial_timeout_millisecond = 50
+read_timeout_millisecond = 100
+write_timeout_millisecond = 100
+
+[sentry]
+dsn = "http://4f8175c96d4c439abaa7337f52ff5927@sentry.itech8.run/2"
+
 

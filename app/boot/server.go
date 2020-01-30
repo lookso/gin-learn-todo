@@ -9,8 +9,10 @@ package boot
 import (
 	"context"
 	db "gin-learn-todo/app/resources/mysql"
+	"gin-learn-todo/app/resources/redis"
 	"gin-learn-todo/app/routers"
 	"gin-learn-todo/app/setting"
+	"github.com/getsentry/sentry-go"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -22,12 +24,16 @@ import (
 )
 
 func New() {
-	InitGin()
+	
 	if _, err := db.Init(); err != nil {
 		log.Fatalf("mysql.Init() error(%v)", err)
 		return
 	}
 	defer db.Close()
+	redis.Init()
+	defer redis.Close()
+
+	InitGin()
 }
 
 func InitGin() {
@@ -40,6 +46,7 @@ func InitGin() {
 		ReadTimeout:       time.Second * 120,
 		ReadHeaderTimeout: time.Second * 10,
 		WriteTimeout:      time.Second * 60,
+		MaxHeaderBytes:    1 << 20, //1M
 	}
 	wg := sync.WaitGroup{}
 
@@ -77,6 +84,15 @@ func Quit(s *http.Server) {
 		log.Fatal("server Shutdown error: ", err)
 	}
 	log.Println("server exiting success")
+}
+
+func InitSentry() {
+	if err := sentry.Init(sentry.ClientOptions{
+		Dsn:              setting.Conf.Sentry.Dsn,
+		AttachStacktrace: true,
+	}); err != nil {
+		log.Fatalf("sentry initialization failed: %v", err)
+	}
 }
 
 func AddRouters(f func(r *gin.Engine)) {

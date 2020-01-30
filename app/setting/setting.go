@@ -14,6 +14,7 @@ type tomlConf struct {
 	ApiServer *ApiServer `toml:"api_server"`
 	Mysql     *Mysql     `toml:"mysql"`
 	Redis     *Redis     `toml:"redis"`
+	Sentry    *Sentry    `toml:"sentry"`
 }
 
 type ApiServer struct {
@@ -38,6 +39,18 @@ type Redis struct {
 	Addr     string `toml:"addr"`
 	Passport string `toml:"passport"`
 	Db       int    `toml:"db"`
+
+	MaxActiveConns          int `toml:"max_active_conns"`
+	MaxIdleConns            int `toml:"max_idle_conns"`
+	IdleTimeoutSecond       int `toml:"idle_timeout_second"`
+	PoolSize                int `toml:"pool_size"`
+	DialTimeoutMillisecond  int `toml:"dial_timeout_millisecond"`
+	ReadTimeoutMillisecond  int `toml:"read_timeout_millisecond"`
+	WriteTimeoutMillisecond int `toml:"write_timeout_millisecond"`
+}
+
+type Sentry struct {
+	Dsn string `toml:"dsn"`
 }
 
 // 所有配置
