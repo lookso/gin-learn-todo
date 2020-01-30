@@ -8,6 +8,7 @@ package boot
 
 import (
 	"context"
+	db "gin-learn-todo/app/resources/mysql"
 	"gin-learn-todo/app/routers"
 	"gin-learn-todo/app/setting"
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,11 @@ import (
 
 func New() {
 	InitGin()
+	if _, err := db.Init(); err != nil {
+		log.Fatalf("mysql.Init() error(%v)", err)
+		return
+	}
+	defer db.Close()
 }
 
 func InitGin() {
@@ -47,7 +53,7 @@ func InitGin() {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
-	log.Printf("http.server start success,listen.port%s",setting.Conf.ApiServer.ListenAddr)
+	log.Printf("http.server start success,listen.port%s", setting.Conf.ApiServer.ListenAddr)
 
 	Quit(s)
 	wg.Wait()

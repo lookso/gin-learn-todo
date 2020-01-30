@@ -3,7 +3,7 @@ title = "gin-learn-todo_dev_conf"
 
 [api_server]
 listen_addr = ":8888"
-debug= true
+debug = true
 timezone = "PRC"
 
 [mysql]
