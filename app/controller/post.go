@@ -6,6 +6,7 @@ import (
 	"gin-learn-todo/pkg/response"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 func Info(c *gin.Context) {
@@ -14,12 +15,12 @@ func Info(c *gin.Context) {
 	}{
 		Name: "hello gin",
 	}
-
-	//_, err := redis.Client.Set("timestamp", time.Now().Format("2006-01-02 15:04:05"), 0).Result()
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	fmt.Println("redis", redis.Client)
+	if err := redis.Client().Set("timestamp", time.Now().Format("2006-01-02 15:04:05"), 0).Err();err!=nil{
+		fmt.Println(err)
+	}
+	timestamp,_:=redis.Client().Get("timestamp").Result()
+	fmt.Println(timestamp)
+	
 
 	c.JSON(response.Data(data))
 }

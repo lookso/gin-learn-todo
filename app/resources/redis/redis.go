@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	Client *redis.Client
+	client *redis.Client
 )
 
 func Init() {
@@ -25,8 +25,8 @@ func Init() {
 		PoolSize:     redisConf.PoolSize,
 	}
 
-	Client := redis.NewClient(options)
-	_, err := Client.Ping().Result()
+	client = redis.NewClient(options)
+	_, err := client.Ping().Result()
 	if err != nil {
 		log.Fatalf("init redis err %s", err)
 	}
@@ -35,5 +35,9 @@ func Init() {
 
 // Close ...
 func Close() {
-	Client.Close()
+	client.Close()
+}
+
+func Client() *redis.Client {
+	return client
 }

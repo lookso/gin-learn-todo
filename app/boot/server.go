@@ -24,7 +24,7 @@ import (
 )
 
 func New() {
-	
+
 	if _, err := db.Init(); err != nil {
 		log.Fatalf("mysql.Init() error(%v)", err)
 		return
@@ -32,6 +32,8 @@ func New() {
 	defer db.Close()
 	redis.Init()
 	defer redis.Close()
+
+	InitSentry()
 
 	InitGin()
 }
@@ -93,6 +95,7 @@ func InitSentry() {
 	}); err != nil {
 		log.Fatalf("sentry initialization failed: %v", err)
 	}
+	log.Println("init sentry success")
 }
 
 func AddRouters(f func(r *gin.Engine)) {

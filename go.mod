@@ -11,4 +11,6 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/onsi/gomega v1.8.1 // indirect
+	github.com/swaggo/gin-swagger v1.2.0
+	golang.org/x/tools v0.0.0-20190611222205-d73e1c7e250b
 )

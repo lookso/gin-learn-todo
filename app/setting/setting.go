@@ -11,31 +11,31 @@ import (
 type tomlConf struct {
 	Title string
 
-	ApiServer *ApiServer `toml:"api_server"`
-	Mysql     *Mysql     `toml:"mysql"`
-	Redis     *Redis     `toml:"redis"`
-	Sentry    *Sentry    `toml:"sentry"`
+	ApiServer *apiServer `toml:"api_server"`
+	Mysql     *mysql     `toml:"mysql"`
+	Redis     *redis     `toml:"redis"`
+	Sentry    *sentry    `toml:"sentry"`
 }
 
-type ApiServer struct {
+type apiServer struct {
 	ListenAddr string `toml:"listen_addr"`
 	Debug      bool   `toml:"debug"`
 	// 时区格式：UTC、PRC、Asia/Calcutta 、Asia/Kolkata
 	Timezone string `toml:"timezone"`
 }
 
-type Mysql struct {
-	Sns *DbConf
+type mysql struct {
+	Sns *dbConf
 }
 
-type DbConf struct {
+type dbConf struct {
 	Addr         string `toml:"addr"`           // 连接信息
 	MaxOpenConns int    `toml:"max_open_conns"` // 用于设置最大打开的连接数，默认值为0表示不限制
 	MaxIdleConns int    `toml:"max_idle_conns"` // 用于设置闲置的连接数
 	MaxLifeTime  int    `toml:"max_life_time"`
 }
 
-type Redis struct {
+type redis struct {
 	Addr     string `toml:"addr"`
 	Passport string `toml:"passport"`
 	Db       int    `toml:"db"`
@@ -49,7 +49,7 @@ type Redis struct {
 	WriteTimeoutMillisecond int `toml:"write_timeout_millisecond"`
 }
 
-type Sentry struct {
+type sentry struct {
 	Dsn string `toml:"dsn"`
 }
 

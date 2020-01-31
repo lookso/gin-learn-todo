@@ -35,7 +35,12 @@ func Init() (db *gorm.DB, err error) {
 	return conn, err
 }
 
+
 // Close 关闭
 func Close() {
 	db.Close()
+}
+
+func Db() *gorm.DB {
+	return db
 }
