@@ -25,7 +25,7 @@ import (
 
 func New() {
 
-	if _, err := db.Init(); err != nil {
+	if err := db.Init(); err != nil {
 		log.Fatalf("mysql.Init() error(%v)", err)
 		return
 	}
