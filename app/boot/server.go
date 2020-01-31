@@ -30,7 +30,11 @@ func New() {
 		return
 	}
 	defer db.Close()
-	redis.Init()
+
+	if err:=redis.Init();err!=nil{
+		log.Fatalf("redis.Init() error(%v)", err)
+		return
+	}
 	defer redis.Close()
 
 	InitSentry()

@@ -11,7 +11,7 @@ var (
 	client *redis.Client
 )
 
-func Init() {
+func Init() (err error) {
 
 	redisConf := setting.Conf.Redis
 	if redisConf == nil {
@@ -26,11 +26,13 @@ func Init() {
 	}
 
 	client = redis.NewClient(options)
-	_, err := client.Ping().Result()
+	_, err = client.Ping().Result()
 	if err != nil {
 		log.Fatalf("init redis err %s", err)
+		return err
 	}
 	log.Println("init redis success")
+	return nil
 }
 
 // Close ...
