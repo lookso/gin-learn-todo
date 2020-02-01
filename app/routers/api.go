@@ -15,7 +15,8 @@ import (
 type api struct{}
 
 func (_ api) Load(r *gin.Engine) {
-	api := r.Group("/api",middleware.Cors())
+	// middleware.RabcMiddleware()
+	api := r.Group("/api",middleware.Cors(),)
 	{
 		api.GET("/user/info", controller.Info)
 		api.GET("/user/list", controller.List)

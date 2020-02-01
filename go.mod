@@ -14,5 +14,5 @@ require (
 	github.com/onsi/gomega v1.8.1 // indirect
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.5.1
-	golang.org/x/tools v0.0.0-20190611222205-d73e1c7e250b
+	go.uber.org/zap v1.13.0
 )

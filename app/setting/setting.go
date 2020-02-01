@@ -22,6 +22,7 @@ type apiServer struct {
 	Debug      bool   `toml:"debug"`
 	// 时区格式：UTC、PRC、Asia/Calcutta 、Asia/Kolkata
 	Timezone string `toml:"timezone"`
+	AppId    string `toml:"app_id"`
 }
 
 type mysql struct {

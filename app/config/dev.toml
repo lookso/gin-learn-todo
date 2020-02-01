@@ -6,6 +6,9 @@ listen_addr = ":8888"
 debug = true
 timezone = "PRC"
 
+# 业务appid
+app_id = "1"
+
 [mysql]
 [mysql.sns]
 addr = "root:lookfor@Dny8$@tcp(127.0.0.1:3306)/sns?parseTime=true&loc=Local&charset=utf8"
