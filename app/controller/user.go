@@ -41,16 +41,15 @@ func Info(c *gin.Context) {
 		}
 		c.JSON(response.Data(user))
 		return
-	} else {
-		if err = mysql.Client().Where("id=? and status=1", uid).First(&user).Error; err != nil {
-			c.AbortWithStatusJSON(response.ParamsError("数据不存在"))
-			return
-		}
-		var userByte []byte
-		userByte, err = json.Marshal(&user)
-		if err := redis.Client().Set(userInfoKey, string(userByte), time.Duration(10*60)*time.Second).Err(); err != nil {
-			log.Fatalf("redis set key(%v) err: %v", userInfoKey, err)
-		}
+	}
+	if err = mysql.Client().Where("id=? and status=1", uid).First(&user).Error; err != nil {
+		c.AbortWithStatusJSON(response.ParamsError("数据不存在"))
+		return
+	}
+	var userByte []byte
+	userByte, err = json.Marshal(&user)
+	if err := redis.Client().Set(userInfoKey, string(userByte), time.Duration(10*60)*time.Second).Err(); err != nil {
+		log.Fatalf("redis set key(%v) err: %v", userInfoKey, err)
 	}
 	c.JSON(response.Data(user))
 }
