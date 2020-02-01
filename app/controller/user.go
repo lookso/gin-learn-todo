@@ -11,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 	redisLib "github.com/go-redis/redis"
 	"log"
-	"net/http"
 	"strconv"
 	"time"
 )
@@ -55,5 +54,16 @@ func Info(c *gin.Context) {
 }
 
 func List(c *gin.Context) {
-	c.String(http.StatusOK, "ok")
+	var err error
+	var users []define.User
+	if err = mysql.Client().Where("status=1").Find(&users).Error; err != nil {
+		c.AbortWithStatusJSON(response.ParamsError("数据不存在"))
+		return
+	}
+	var count int32
+	if err = mysql.Client().Model(&define.User{}).Where("status=1").Count(&count).Error; err != nil {
+		c.AbortWithStatusJSON(response.ParamsError("获取总数失败"))
+		return
+	}
+	c.JSON(response.DataWithTotal(count, users))
 }
