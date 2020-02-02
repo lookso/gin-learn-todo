@@ -61,9 +61,9 @@ func List(c *gin.Context) {
 		return
 	}
 	var count int32
-	//if err = mysql.Client().Model(&define.User{}).Where("status=1").Count(&count).Error; err != nil {
-	//	c.AbortWithStatusJSON(response.ParamsError("获取总数失败"))
-	//	return
-	//}
+	if err = mysql.Client().Model(&define.User{}).Where("status=1").Count(&count).Error; err != nil {
+		c.AbortWithStatusJSON(response.ParamsError("获取总数失败"))
+		return
+	}
 	c.JSON(response.DataWithTotal(count, users))
 }
