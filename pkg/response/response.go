@@ -97,7 +97,7 @@ func Forbidden(msg string) (int, Response) {
 func ServerError(msg string) (int, Response) {
 
 	if msg == "" {
-		msg = "无权访问"
+		msg = "访问错误"
 	}
 
 	resp := Response{

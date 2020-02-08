@@ -15,6 +15,15 @@ import (
 	"time"
 )
 
+// @Summary 单个用户详情接口
+// @Description 单个用户详情
+// @Tags 后台API
+// @Accept json
+// @Produce json
+// @Router /user/info/{id} [get]
+// @Security ApiKeyAuth
+// @Param id path int true "用户id"
+// @Success 200 {object} define.User "单个用户详情"
 func Info(c *gin.Context) {
 	var err error
 	var user define.User
