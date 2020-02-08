@@ -1,12 +1,12 @@
 #### 运行服务
 ```
-go build -o output/bin/gin-learn-todo  app/main.go
+go build -o output/bin/gin-learn-todo main.go
 
 ./output/bin/gin-learn-todo
 
 ```
 
-#### 参考资料
+####  Gin
 
 ```
 Gin框架 学习
@@ -30,3 +30,20 @@ go get -u github.com/swaggo/gin-swagger/swaggerFiles
 go build -tags=doc 
 
 ```
+
+#### Gitlab CI/CD
+```
+
+```
+
+#### Go-micro
+```
+
+```
+
+#### Docker
+
+#### K8s
+
+#### Sentry
+
