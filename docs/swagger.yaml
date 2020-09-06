@@ -1,33 +1,46 @@
 definitions:
-  define.User:
+  model.User:
     properties:
       age:
+        description: 年龄
         type: integer
       astrology:
+        description: 星座
         type: string
       avatar:
+        description: 小头像
         type: string
       create_time:
+        description: 创建时间
         type: integer
       id:
         type: integer
       medium:
+        description: 大头像
         type: string
-      nick_name:
+      nickname:
+        description: 昵称
         type: string
       passport:
+        description: 用户密码
         type: string
       phone:
+        description: 手机号码
         type: integer
       sex:
+        description: 性别:1男2女
         type: integer
       source:
+        description: 来源 0.真实用户 1.糗事百科 2.段子手
         type: string
       status:
+        description: 1有效 2无效
         type: integer
       update_time:
+        description: 更新时间
         type: integer
       username:
+        description: 用户姓名
         type: string
     type: object
 info:
@@ -37,24 +50,26 @@ paths:
   /user/info/{id}:
     get:
       consumes:
-      - application/json
-      description: 单个用户详情
+      - application/x-www-form-urlencoded
+      description: 用户列表
       parameters:
       - description: 用户id
         in: path
-        name: id
+        name: page
         required: true
         type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: 单个用户详情
+          description: 用户详情
           schema:
-            $ref: '#/definitions/define.User'
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
       security:
       - ApiKeyAuth: []
-      summary: 单个用户详情接口
+      summary: 用户列表
       tags:
-      - 后台API
+      - 业务API
 swagger: "2.0"

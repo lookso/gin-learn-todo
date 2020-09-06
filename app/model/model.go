@@ -4,10 +4,10 @@
 @File : model
 @Software: GoLand
 */
-package define
+package model
 
 type Model struct {
-	Id         int64 `json:"id"`
+	Id         uint  `json:"id"`
 	CreateTime int64 `json:"create_time"`
 	UpdateTime int64 `json:"update_time"`
 }

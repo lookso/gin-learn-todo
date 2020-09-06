@@ -8,10 +8,10 @@
 package utils
 
 import (
-"bytes"
-"crypto/aes"
-"crypto/cipher"
-"encoding/base64"
+	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/base64"
 )
 
 func AesEncrypt(orig string, key string) (string, error) {
@@ -57,4 +57,3 @@ func PKCS7UnPadding(origData []byte) []byte {
 	padding := int(origData[length-1])
 	return origData[:(length - padding)]
 }
-

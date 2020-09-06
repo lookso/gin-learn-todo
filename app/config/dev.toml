@@ -5,6 +5,7 @@ title = "gin-learn-todo_dev_conf"
 listen_addr = ":8888"
 debug = true
 timezone = "PRC"
+env = dev
 
 # 业务appid
 app_id = "1"

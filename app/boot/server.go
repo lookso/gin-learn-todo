@@ -1,6 +1,6 @@
 /*
 @Time : 2019-11-24 11:00 
-@Author : Tenlu
+@Author : Peanut
 @File : server
 @Software: GoLand
 */
@@ -8,12 +8,11 @@ package boot
 
 import (
 	"context"
-	db "gin-learn-todo/app/resources/mysql"
-	"gin-learn-todo/app/resources/redis"
+	db "gin-learn-todo/app/libs/mysql"
+	"gin-learn-todo/app/libs/redis"
 	"gin-learn-todo/app/routers"
 	"gin-learn-todo/app/setting"
 	"github.com/getsentry/sentry-go"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"os"
@@ -60,7 +59,6 @@ func InitGin() {
 	go func() {
 		wg.Add(1)
 		defer wg.Done()
-		//s.logger.Debug("server listen at ", s.config.Listen)
 		// service connections
 		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen: %s\n", err)
@@ -100,9 +98,4 @@ func InitSentry() {
 		log.Fatalf("sentry initialization failed: %v", err)
 	}
 	log.Println("init sentry success")
-}
-
-func AddRouters(f func(r *gin.Engine)) {
-	var engine *gin.Engine
-	f(engine)
 }

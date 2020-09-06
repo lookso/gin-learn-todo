@@ -1,32 +1,31 @@
-package controller
+package user
 
 import (
 	"encoding/json"
 	"fmt"
 	"gin-learn-todo/app/enums/rediskeys"
-	"gin-learn-todo/app/model/define"
-	"gin-learn-todo/app/resources/mysql"
-	"gin-learn-todo/app/resources/redis"
+	"gin-learn-todo/app/libs/mysql"
+	"gin-learn-todo/app/libs/redis"
+	"gin-learn-todo/app/model"
 	"gin-learn-todo/pkg/response"
 	"github.com/gin-gonic/gin"
-	redisLib "github.com/go-redis/redis"
 	"log"
 	"strconv"
 	"time"
 )
 
-// @Summary 单个用户详情接口
-// @Description 单个用户详情
-// @Tags 后台API
-// @Accept json
+// @Summary 用户详情接口
+// @Description 用户详情
+// @Tags 业务API
+// @Accept x-www-form-urlencoded
 // @Produce json
 // @Router /user/info/{id} [get]
 // @Security ApiKeyAuth
 // @Param id path int true "用户id"
-// @Success 200 {object} define.User "单个用户详情"
+// @Success 200 {object} model.User "用户详情"
 func Info(c *gin.Context) {
 	var err error
-	var user define.User
+	var user model.User
 	id := c.Query("id")
 	if id == "" {
 		c.AbortWithStatusJSON(response.ParamsError("Id 不能为空"))
@@ -39,7 +38,7 @@ func Info(c *gin.Context) {
 	}
 	var userStr string
 	userInfoKey := fmt.Sprintf(rediskeys.SnsUserInfoKey, uid)
-	if userStr, err = redis.Client().Get(userInfoKey).Result(); err != nil && err != redisLib.Nil {
+	if userStr, err = redis.Client().Get(userInfoKey).Result(); err != nil && err != redis.ErrNil {
 		log.Fatalf("redis get key(%v) err: %v", userInfoKey, err)
 	}
 	if userStr != "" {
@@ -62,15 +61,24 @@ func Info(c *gin.Context) {
 	c.JSON(response.Data(user))
 }
 
+// @Summary 用户列表
+// @Description 用户列表
+// @Tags 业务API
+// @Accept x-www-form-urlencoded
+// @Produce json
+// @Router /user/list [get]
+// @Security ApiKeyAuth 
+// @Success 200 {array} model.User "用户列表"
 func List(c *gin.Context) {
 	var err error
-	var users []define.User
+	var users []model.User
 	if err = mysql.Client().Where("status=1").Find(&users).Error; err != nil {
 		c.AbortWithStatusJSON(response.ParamsError("数据不存在"))
 		return
 	}
 	var count int32
-	if err = mysql.Client().Model(&define.User{}).Where("status=1").Count(&count).Error; err != nil {
+	if err = mysql.Client().Model(&model.User{}).
+		Where("status=1").Count(&count).Error; err != nil {
 		c.AbortWithStatusJSON(response.ParamsError("获取总数失败"))
 		return
 	}

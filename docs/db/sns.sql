@@ -42,5 +42,53 @@ CREATE TABLE `sns_user_community_post` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='社区用户帖子表';
 
 
+CREATE TABLE `alarms` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `main_title` varchar(45) NOT NULL DEFAULT '' COMMENT '主标题',
+  `sub_title` varchar(45) NOT NULL DEFAULT '' COMMENT '副标题',
+  `cover_img` varchar(255) NOT NULL DEFAULT '' COMMENT 'cover图片',
+  `unlock_type` varchar(32) NOT NULL DEFAULT '' COMMENT '解锁类型:免费:free 快乐币解锁:coin 快乐能量解锁:energy 视频广告解锁 ad',
+  `pay_money` int(11) NOT NULL DEFAULT '0' COMMENT '付费金额',
+  `tag` varchar(32) NOT NULL DEFAULT '' COMMENT 'new 最新,hot 最热',
+  `set_play_num` int(11) NOT NULL DEFAULT '0' COMMENT '后台设置的播放量',
+  `real_play_num` int(11) NOT NULL DEFAULT '0' COMMENT '真实播放量',
+  `duration` int(10) NOT NULL DEFAULT '0' COMMENT '音频时长',
+  `alarm_url` varchar(255) NOT NULL DEFAULT '' COMMENT '闹铃地址',
+  `star_id` int(10) NOT NULL COMMENT '明星id',
+  `start_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '开始时间',
+  `status` tinyint(3) NOT NULL DEFAULT '1' COMMENT '1上线 2下线',
+  `alarm_type` varchar(32) NOT NULL DEFAULT '' COMMENT '闹铃类型音频:audio,视频:video',
+  `is_top` tinyint(3) NOT NULL COMMENT '是否置顶0否1是',
+  `top_sort` int(10) NOT NULL COMMENT '置顶顺序',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COMMENT='闹铃';
+
+CREATE TABLE `stars` (
+   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+   `name` varchar(45) NOT NULL DEFAULT '' COMMENT '合集名称',
+   `sort` int(11) NOT NULL COMMENT '按优先级升序',
+   `cover_img` varchar(255) NOT NULL DEFAULT '' COMMENT '明星cover图',
+   `version` varchar(45) NOT NULL DEFAULT '0.0.0' COMMENT '版本号',
+   `status` tinyint(3) NOT NULL DEFAULT '1' COMMENT '1 上线线 2下线',
+   `is_index` tinyint(3) NOT NULL DEFAULT '0' COMMENT '是否在首页0否1是',
+   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='明星表';
 
 
+CREATE TABLE `user_alarms` (
+   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+   `user_id` int(10) unsigned NOT NULL COMMENT '用户id',
+   `alarm_id` int(10) unsigned NOT NULL COMMENT '闹铃id',
+   `star_id` int(10) unsigned NOT NULL COMMENT '明星Id',
+   `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+   `updated_at` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+   `deleted_at` timestamp NULL DEFAULT NULL COMMENT '删除时间',
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `uniq_id_alarm` (`user_id`,`alarm_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='用户解锁的闹铃';

@@ -13,10 +13,7 @@ import (
 
 var swagHandler gin.HandlerFunc
 
-type docs struct {
-}
-
-func (_ docs) Load(r *gin.Engine) {
+func docs(r *gin.Engine) {
 	if swagHandler != nil {
 		r.GET("/swagger/*any", swagHandler)
 	}

@@ -11,6 +11,10 @@ var (
 	client *redis.Client
 )
 
+const (
+	ErrNil = redis.Nil
+)
+
 func Init() (err error) {
 
 	redisConf := setting.Conf.Redis

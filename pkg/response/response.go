@@ -9,23 +9,22 @@ type Response struct {
 	Data  interface{} `json:"data"`
 }
 
-func DataWithTotal(total int32, obj interface{}) (int, Response) {
+func DataWithTotal(Total int32, obj interface{}) (int, Response) {
 	resp := Response{
 		Code:  0,
 		Msg:   "success",
+		Total: Total,
 		Data:  obj,
-		Total: total,
 	}
 	return 200, resp
 }
-
-func Data(obj interface{})(int,Response) {
-	resp:=Response{
-		Code:0,
-		Msg:"success",
-		Data:obj,
+func Data(obj interface{}) (int, Response) {
+	resp := Response{
+		Code: 0,
+		Msg:  "success",
+		Data: obj,
 	}
-	return 200,resp
+	return 200, resp
 }
 
 func Error(code int, msg string) (int, Response) {
@@ -99,7 +98,6 @@ func ServerError(msg string) (int, Response) {
 	if msg == "" {
 		msg = "访问错误"
 	}
-
 	resp := Response{
 		Code: ErrCodeServerError,
 		Msg:  msg,

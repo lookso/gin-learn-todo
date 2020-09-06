@@ -4,7 +4,7 @@
 @File : user_role
 @Software: GoLand
 */
-package tables
+package model
 
 import (
 	"gin-learn-todo/app/resources/mysql"

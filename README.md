@@ -47,3 +47,14 @@ go build -tags=doc
 
 #### Sentry
 
+
+### Gorm
+
+####  通过 Omit方法可以设置忽略的字段
+
+
+### 性能分析工具 gops pprof
+
+
+
+
