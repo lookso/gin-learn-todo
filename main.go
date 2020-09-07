@@ -8,9 +8,22 @@ package main
 
 import (
 	"gin-learn-todo/boot"
+	db "gin-learn-todo/libs/mysql"
+	"log"
 )
 
 func main() {
-	
-	boot.New()
+	if err := db.Init(); err != nil {
+		log.Fatalf("mysql.Init() error(%v)", err)
+		return
+	}
+	defer db.Close()
+
+	//if err := redis.Init(); err != nil {
+	//	log.Fatalf("redis.Init() error(%v)", err)
+	//	return
+	//}
+	//defer redis.Close()
+
+	boot.NewServer()
 }

@@ -2,7 +2,7 @@
 title = "gin-learn-todo_prod_conf"
 
 [app]
-listen_addr = ":8888"
+addr = ":8888"
 debug = true
 timezone = "PRC"
 env = "prod"
@@ -10,6 +10,7 @@ env = "prod"
 app_id = "1"
 
 [sentry]
+env = "test,prod"
 dsn = "http://4f8175c96d4c439abaa7337f52ff5927@sentry.itech8.run/2"
 
 [mysql]

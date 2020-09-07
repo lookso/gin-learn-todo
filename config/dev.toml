@@ -2,7 +2,7 @@
 title = "gin-learn-todo_dev_conf"
 
 [app]
-listen_addr = ":8888"
+addr = ":8888"
 debug = true
 timezone = "PRC"
 env = "dev"

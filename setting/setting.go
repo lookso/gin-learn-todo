@@ -11,14 +11,14 @@ import (
 type tomlConf struct {
 	Title string
 
-	App    *app    `toml:"api_server"`
+	App    *app    `toml:"app"`
 	Mysql  *mysql  `toml:"mysql"`
 	Redis  *redis  `toml:"redis"`
 	Sentry *sentry `toml:"sentry"`
 }
 
 type app struct {
-	ListenAddr string `toml:"listen_addr"`
+	Addr string `toml:"addr"`
 	Debug      bool   `toml:"debug"`
 	// 时区格式：UTC、PRC、Asia/Calcutta 、Asia/Kolkata
 	Timezone string `toml:"timezone"`

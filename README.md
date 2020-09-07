@@ -1,8 +1,8 @@
 #### 运行服务
 ```
-go build -o output/bin/gin-learn-todo main.go
+go build -o gin-learn-todo main.go
 
-./output/bin/gin-learn-todo
+./gin-learn-todo
 
 ```
 

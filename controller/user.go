@@ -3,10 +3,13 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"gin-learn-todo/libs/jwt"
 	"gin-learn-todo/libs/mysql"
 	"gin-learn-todo/libs/redis"
 	"gin-learn-todo/model"
 	"gin-learn-todo/pkg/response"
+	"gin-learn-todo/pkg/utils"
+	"gin-learn-todo/resource"
 	"github.com/gin-gonic/gin"
 	"log"
 	"strconv"
@@ -83,4 +86,44 @@ func List(c *gin.Context) {
 		return
 	}
 	c.JSON(response.DataWithTotal(count, users))
+}
+
+var (
+	uuid     string
+	username = "peanut"
+	password = "123456"
+)
+
+func Login(c *gin.Context) {
+	var urq resource.LoginRequest
+	if err := c.ShouldBind(&urq); err != nil {
+		c.JSON(response.BadRequest("参数错误"))
+		return
+	}
+	uuid = utils.GetUuid()
+	tokenString, err := jwt.GenerateToken(uuid, urq.UserName, urq.Password)
+	if err != nil {
+		c.JSON(response.BadRequest("鉴权失败"))
+		return
+	}
+	// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTg4NjU0NjEsImlhdCI6MTU5ODg2MTg2MX0.qbsLiy9Z_k3J61kuHyxBZYTCY_ZuD2rVmG6zUsY4FBI
+	c.JSON(response.Data(tokenString))
+}
+
+func UserInfo(c *gin.Context) {
+	claims := c.MustGet("claims").(*jwt.MyClaims)
+	if claims.UserName == "" || claims.Uid == "" {
+		c.JSON(response.BadRequest(""))
+		return
+	}
+	c.JSON(response.Data(resource.UserInfoResponse{
+		Id:   claims.Uid,
+		Name: claims.UserName,
+		Sex:  1,
+		Age:  28,
+	}))
+}
+// 更新token
+func Refresh(c *gin.Context) {
+	c.JSON(response.Data(nil))
 }

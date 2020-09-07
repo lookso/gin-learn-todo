@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"github.com/google/uuid"
 	"io/ioutil"
 	"log"
 )
@@ -30,4 +31,10 @@ func GenTlsConfig(clientCertPem string, clientKeyPem string, caCertPem string) (
 	}
 
 	return
+}
+
+// 唯一Id
+func GetUuid() string {
+	uuidObj := uuid.New()
+	return uuidObj.String()
 }
