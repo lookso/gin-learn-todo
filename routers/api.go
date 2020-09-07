@@ -13,8 +13,12 @@ import (
 )
 
 func api(r *gin.Engine) {
-	// middleware.RabcMiddleware()
-	api := r.Group("/api", middleware.Cors())
+	l := r.Group("/api/v1", middleware.Cors())
+	{
+		l.POST("/user/login", controller.Login)
+	}
+
+	api := r.Group("/api/v1", middleware.JwtAuth())
 	{
 		api.GET("/user/info", controller.Info)
 		api.GET("/user/list", controller.List)
