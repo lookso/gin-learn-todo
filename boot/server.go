@@ -8,11 +8,10 @@ package boot
 
 import (
 	"context"
-	"fmt"
 	"gin-learn-todo/routers"
 	"gin-learn-todo/setting"
 	"github.com/getsentry/sentry-go"
-	"github.com/gin-contrib/pprof"
+	sentryGin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/google/gops/agent"
 	"io"
@@ -26,67 +25,47 @@ import (
 	"time"
 )
 
-//type Server struct {
-//	engine gin.Engine
-//}
-func NewServer() {
-	initSentry()
-	initGin()
-	initPrometheus()
-}
+var engine *gin.Engine
 
-func initGin() {
-	router := gin.New()
-	routers.All(router)
+func NewServer() {
+
+	engine = gin.New()
+	routers.All(engine)
 	// 禁用控制台颜色
 	gin.DisableConsoleColor()
 	// 创建记录日志的文件
-	f, _ := os.Create("logs/gin.log")
+	f, _ := os.Create("./logs/gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
-
 	// 如果需要将日志同时写入文件和控制台，请使用以下代码
 	// gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
-
 	// 默认中间件注册
-	// gin.Logger()
-	// 自定义日志格式
-	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
-		// 你的自定义格式
-		return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" %s\"\n",
-			param.ClientIP,
-			param.TimeStamp.Format(time.RFC1123),
-			param.Method,
-			param.Path,
-			param.Request.Proto,
-			param.StatusCode,
-			param.Latency,
-			param.Request.UserAgent(),
-			param.ErrorMessage,
-		)
-	}))
-
-
-
+	engine.Use(gin.Logger())
 	// 先开启release mode ，屏蔽掉gin默认的waring
 	gin.SetMode(gin.ReleaseMode)
 	if setting.Conf.App.Debug {
-		pprof.Register(router) // 性能分析工具
+		//pprof.Register(engine) // 性能分析工具 pprof和gops二选一
+		// debug 模式下开启gops
+		log.Printf("gops listen at %s", ":9000")
+		if err := agent.Listen(agent.Options{
+			Addr:            ":9000",
+			ShutdownCleanup: true, // automatically closes on os.Interrupt
+		}); err != nil {
+			log.Printf("gops agent %s\n", err)
+		}
 		gin.SetMode(gin.DebugMode)
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
 	// 初始化http server
 	s := &http.Server{
 		Addr:              setting.Conf.App.Addr,
-		Handler:           router,
+		Handler:           engine,
 		ReadTimeout:       time.Second * 120,
 		ReadHeaderTimeout: time.Second * 10,
 		WriteTimeout:      time.Second * 60,
 		MaxHeaderBytes:    1 << 20, //1M
 	}
 	wg := sync.WaitGroup{}
-
 	// 启动http服务
 	go func() {
 		wg.Add(1)
@@ -97,27 +76,14 @@ func initGin() {
 		}
 	}()
 	log.Printf("http.server start success,listen.port%s", setting.Conf.App.Addr)
-	if setting.Conf.App.Debug {
-		// debug 模式下开启gops
-		log.Println("gops listen at ", ":9000")
-		if err := agent.Listen(agent.Options{
-			Addr:            ":9000",
-			ShutdownCleanup: true, // automatically closes on os.Interrupt
-		}); err != nil {
-			log.Println("gops agent %s\n", err)
-		}
-	}
+	initSentry()
+	initPrometheus()
+
 	Quit(s)
 	wg.Wait()
 }
 
-func initPrometheus() {
-	p := NewPrometheus("gin")
-	p.Use(&gin.Engine{})
-}
-
 func Quit(s *http.Server) {
-
 	// Wait for interrupt signal to gracefully shutdown the server with
 	// a timeout of 10 seconds.
 	quit := make(chan os.Signal, 1)
@@ -137,15 +103,9 @@ func Quit(s *http.Server) {
 }
 
 func initSentry() {
-	//if err := sentry.Init(sentry.ClientOptions{
-	//	Dsn:              setting.Conf.Sentry.Dsn,
-	//	AttachStacktrace: true,
-	//}); err != nil {
-	//	log.Fatalf("sentry initialization failed: %v", err)
-	//}
 	// 如果没指定sentry开启的环境，则默认 test 和 prod 开启sentry
 	if setting.Conf.Sentry.Env == "" {
-		setting.Conf.Sentry.Env  = "test,prod"
+		setting.Conf.Sentry.Env = "test,prod"
 	}
 	if setting.Conf.Sentry.Dsn != "" && strings.Contains(setting.Conf.Sentry.Env, os.Getenv("ENV")) { // 启用sentry时
 		log.Println("sentry enabled")
@@ -158,11 +118,15 @@ func initSentry() {
 			log.Fatalf("sentry initialization failed: %v", err)
 		}
 		// 启用sentry
-		//s.gin.Use(middleware.RecoveryAfterSentry())
-		//router.Use(gin.Recovery(), sentryGin.New(sentryGin.Options{Repanic: true}))
+		engine.Use(gin.Recovery(), sentryGin.New(sentryGin.Options{Repanic: true}))
 	} else { // sentry没有启用时，使用gin框架自身的Recovery来处理panic
-		//gin.Use(gin.Recovery())
+		engine.Use(gin.Recovery())
 	}
 
 	log.Println("init sentry success")
+}
+
+func initPrometheus() {
+	p := NewPrometheus("gin")
+	p.Use(engine)
 }

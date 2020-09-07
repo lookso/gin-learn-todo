@@ -9,6 +9,7 @@ package main
 import (
 	"gin-learn-todo/boot"
 	db "gin-learn-todo/libs/mysql"
+	"gin-learn-todo/libs/redis"
 	"log"
 )
 
@@ -19,11 +20,11 @@ func main() {
 	}
 	defer db.Close()
 
-	//if err := redis.Init(); err != nil {
-	//	log.Fatalf("redis.Init() error(%v)", err)
-	//	return
-	//}
-	//defer redis.Close()
+	if err := redis.Init(); err != nil {
+		log.Fatalf("redis.Init() error(%v)", err)
+		return
+	}
+	defer redis.Close()
 
 	boot.NewServer()
 }

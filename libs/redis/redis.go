@@ -16,7 +16,6 @@ const (
 )
 
 func Init() (err error) {
-
 	redisConf := setting.Conf.Redis
 	if redisConf == nil {
 		panic("init redis error")
