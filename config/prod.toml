@@ -6,9 +6,11 @@ listen_addr = ":8888"
 debug = true
 timezone = "PRC"
 env = "prod"
-
 # 业务appid
 app_id = "1"
+
+[sentry]
+dsn = "http://4f8175c96d4c439abaa7337f52ff5927@sentry.itech8.run/2"
 
 [mysql]
 [mysql.sns]
@@ -32,5 +34,3 @@ dial_timeout_millisecond = 50
 read_timeout_millisecond = 100
 write_timeout_millisecond = 100
 
-[sentry]
-dsn = "http://4f8175c96d4c439abaa7337f52ff5927@sentry.itech8.run/2"

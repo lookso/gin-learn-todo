@@ -11,13 +11,13 @@ import (
 type tomlConf struct {
 	Title string
 
-	ApiServer *apiServer `toml:"api_server"`
-	Mysql     *mysql     `toml:"mysql"`
-	Redis     *redis     `toml:"redis"`
-	Sentry    *sentry    `toml:"sentry"`
+	App    *app    `toml:"api_server"`
+	Mysql  *mysql  `toml:"mysql"`
+	Redis  *redis  `toml:"redis"`
+	Sentry *sentry `toml:"sentry"`
 }
 
-type apiServer struct {
+type app struct {
 	ListenAddr string `toml:"listen_addr"`
 	Debug      bool   `toml:"debug"`
 	// 时区格式：UTC、PRC、Asia/Calcutta 、Asia/Kolkata

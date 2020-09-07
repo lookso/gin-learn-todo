@@ -9,7 +9,6 @@ package boot
 import (
 	"context"
 	db "gin-learn-todo/libs/mysql"
-	"gin-learn-todo/libs/redis"
 	"gin-learn-todo/routers"
 	"gin-learn-todo/setting"
 	"github.com/getsentry/sentry-go"
@@ -31,11 +30,11 @@ func New() {
 	}
 	defer db.Close()
 
-	if err := redis.Init(); err != nil {
-		log.Fatalf("redis.Init() error(%v)", err)
-		return
-	}
-	defer redis.Close()
+	//if err := redis.Init(); err != nil {
+	//	log.Fatalf("redis.Init() error(%v)", err)
+	//	return
+	//}
+	//defer redis.Close()
 
 	InitSentry()
 
@@ -47,7 +46,7 @@ func InitGin() {
 
 	// 初始化http server
 	s := &http.Server{
-		Addr:              setting.Conf.ApiServer.ListenAddr,
+		Addr:              setting.Conf.App.ListenAddr,
 		Handler:           router,
 		ReadTimeout:       time.Second * 120,
 		ReadHeaderTimeout: time.Second * 10,
@@ -65,8 +64,8 @@ func InitGin() {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
-	log.Printf("http.server start success,listen.port%s", setting.Conf.ApiServer.ListenAddr)
-	if setting.Conf.ApiServer.Debug {
+	log.Printf("http.server start success,listen.port%s", setting.Conf.App.ListenAddr)
+	if setting.Conf.App.Debug {
 		// debug 模式下开启gops
 		log.Println("gops listen at ", ":9000")
 		if err := agent.Listen(agent.Options{

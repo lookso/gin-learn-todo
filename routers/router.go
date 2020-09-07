@@ -49,7 +49,7 @@ func SetUpRouter() *gin.Engine {
 
 	// 先开启release mode ，屏蔽掉gin默认的waring
 	gin.SetMode(gin.ReleaseMode)
-	if setting.Conf.ApiServer.Debug {
+	if setting.Conf.App.Debug {
 		pprof.Register(router) // 性能分析工具
 		gin.SetMode(gin.DebugMode)
 	} else {
