@@ -1,17 +1,18 @@
 # This is a TOML document for go-sns-manager-api.
 title = "gin-learn-todo_prod_conf"
 
-[api_server]
+[app]
 listen_addr = ":8888"
 debug = true
 timezone = "PRC"
+env = "prod"
 
 # 业务appid
 app_id = "1"
 
 [mysql]
 [mysql.sns]
-addr = "root:lookfor@Dny8$@tcp(127.0.0.1:3306)/sns?parseTime=true&loc=Local&charset=utf8"
+addr = "root:123456@tcp(127.0.0.1:3306)/sns?parseTime=true&loc=Local&charset=utf8"
 max_open_conns = 3
 max_idle_conns = 2
 max_life_time = 3600

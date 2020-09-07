@@ -56,6 +56,7 @@ func Info(c *gin.Context) {
 	userByte, err = json.Marshal(&user)
 	if err := redis.Client().Set(userInfoKey, string(userByte), time.Duration(10*60)*time.Second).Err(); err != nil {
 		log.Fatalf("redis set key(%v) err: %v", userInfoKey, err)
+		return
 	}
 	c.JSON(response.Data(user))
 }
