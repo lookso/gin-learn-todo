@@ -7,7 +7,7 @@
 package main
 
 import (
-	"gin-learn-todo/app/boot"
+	"gin-learn-todo/boot"
 )
 
 func main() {

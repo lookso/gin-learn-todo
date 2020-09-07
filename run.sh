@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-go run app/main.go ../gin-learn-todo/app/config/dev.toml
+go run main.go ../gin-learn-todo/config/dev.toml
 
