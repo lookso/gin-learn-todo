@@ -12,7 +12,6 @@ import (
 	"gin-learn-todo/routers"
 	"gin-learn-todo/setting"
 	"github.com/getsentry/sentry-go"
-	sentryGin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"github.com/google/gops/agent"
@@ -21,11 +20,15 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
 )
 
+//type Server struct {
+//	engine gin.Engine
+//}
 func NewServer() {
 	initSentry()
 	initGin()
@@ -62,7 +65,7 @@ func initGin() {
 		)
 	}))
 
-	router.Use(gin.Recovery(), sentryGin.New(sentryGin.Options{Repanic: true}))
+
 
 	// 先开启release mode ，屏蔽掉gin默认的waring
 	gin.SetMode(gin.ReleaseMode)
@@ -134,11 +137,32 @@ func Quit(s *http.Server) {
 }
 
 func initSentry() {
-	if err := sentry.Init(sentry.ClientOptions{
-		Dsn:              setting.Conf.Sentry.Dsn,
-		AttachStacktrace: true,
-	}); err != nil {
-		log.Fatalf("sentry initialization failed: %v", err)
+	//if err := sentry.Init(sentry.ClientOptions{
+	//	Dsn:              setting.Conf.Sentry.Dsn,
+	//	AttachStacktrace: true,
+	//}); err != nil {
+	//	log.Fatalf("sentry initialization failed: %v", err)
+	//}
+	// 如果没指定sentry开启的环境，则默认 test 和 prod 开启sentry
+	if setting.Conf.Sentry.Env == "" {
+		setting.Conf.Sentry.Env  = "test,prod"
 	}
+	if setting.Conf.Sentry.Dsn != "" && strings.Contains(setting.Conf.Sentry.Env, os.Getenv("ENV")) { // 启用sentry时
+		log.Println("sentry enabled")
+		if err := sentry.Init(sentry.ClientOptions{
+			Dsn:              setting.Conf.Sentry.Dsn,
+			Debug:            setting.Conf.App.Debug,
+			AttachStacktrace: false,
+			Environment:      os.Getenv("ENV"),
+		}); err != nil {
+			log.Fatalf("sentry initialization failed: %v", err)
+		}
+		// 启用sentry
+		//s.gin.Use(middleware.RecoveryAfterSentry())
+		//router.Use(gin.Recovery(), sentryGin.New(sentryGin.Options{Repanic: true}))
+	} else { // sentry没有启用时，使用gin框架自身的Recovery来处理panic
+		//gin.Use(gin.Recovery())
+	}
+
 	log.Println("init sentry success")
 }

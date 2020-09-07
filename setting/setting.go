@@ -18,8 +18,8 @@ type tomlConf struct {
 }
 
 type app struct {
-	Addr string `toml:"addr"`
-	Debug      bool   `toml:"debug"`
+	Addr  string `toml:"addr"`
+	Debug bool   `toml:"debug"`
 	// 时区格式：UTC、PRC、Asia/Calcutta 、Asia/Kolkata
 	Timezone string `toml:"timezone"`
 	AppId    string `toml:"app_id"`
@@ -51,6 +51,7 @@ type redis struct {
 }
 
 type sentry struct {
+	Env string `toml:env`
 	Dsn string `toml:"dsn"`
 }
 
