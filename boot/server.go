@@ -9,6 +9,7 @@ package boot
 import (
 	"context"
 	db "gin-learn-todo/libs/mysql"
+	"gin-learn-todo/libs/redis"
 	"gin-learn-todo/routers"
 	"gin-learn-todo/setting"
 	"github.com/getsentry/sentry-go"
@@ -30,11 +31,11 @@ func New() {
 	}
 	defer db.Close()
 
-	//if err := redis.Init(); err != nil {
-	//	log.Fatalf("redis.Init() error(%v)", err)
-	//	return
-	//}
-	//defer redis.Close()
+	if err := redis.Init(); err != nil {
+		log.Fatalf("redis.Init() error(%v)", err)
+		return
+	}
+	defer redis.Close()
 
 	InitSentry()
 
