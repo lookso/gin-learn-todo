@@ -23,7 +23,7 @@ func All(r *gin.Engine) {
 		})
 		return
 	})
-
+	// 注册路由
 	api(r)
 	docs(r)
 	test(r)
