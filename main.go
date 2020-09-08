@@ -8,6 +8,7 @@ package main
 
 import (
 	"gin-learn-todo/boot"
+	"gin-learn-todo/libs/etcd"
 	db "gin-learn-todo/libs/mysql"
 	"gin-learn-todo/libs/redis"
 	"log"
@@ -25,6 +26,8 @@ func main() {
 		return
 	}
 	defer redis.Close()
+
+	etcd.Init()
 
 	boot.NewServer()
 }
