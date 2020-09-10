@@ -2,8 +2,8 @@ package etcd
 
 import (
 	"errors"
-	"fmt"
 	"go.etcd.io/etcd/clientv3"
+	"log"
 	"time"
 )
 
@@ -20,11 +20,11 @@ func Init() {
 		DialTimeout: 5 * time.Second,
 	})
 	if err != nil {
-		fmt.Println("connect failed, err:", err)
+		log.Fatalf("init etcd err %s", err)
 		return
 	}
 	// 建立客户端成功
-	fmt.Println("connect success")
+	log.Printf("init etcd success")
 }
 func mustInit() error {
 	if cli == nil {
