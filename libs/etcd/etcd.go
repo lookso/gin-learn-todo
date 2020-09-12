@@ -13,7 +13,7 @@ var (
 	LeaseKeepAliveFail = errors.New("lease keepAlive fail")
 )
 
-func Init() {
+func Init() error{
 	var err error
 	cli, err = clientv3.New(clientv3.Config{
 		Endpoints:   []string{"localhost:2379", "localhost:22379", "localhost:32379"},
@@ -21,10 +21,11 @@ func Init() {
 	})
 	if err != nil {
 		log.Fatalf("init etcd err %s", err)
-		return
+		return err
 	}
 	// 建立客户端成功
 	log.Printf("init etcd success")
+	return nil
 }
 func mustInit() error {
 	if cli == nil {

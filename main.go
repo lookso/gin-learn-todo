@@ -27,7 +27,9 @@ func main() {
 	}
 	defer redis.Close()
 
-	etcd.Init()
-
+	if err := etcd.Init(); err != nil {
+		log.Fatalf("etcd.Init() error(%v)", err)
+		return
+	}
 	boot.NewServer()
 }
