@@ -16,7 +16,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/gops/agent"
 	"go.uber.org/zap"
-	"io"
 	"net/http"
 	"os"
 	"os/signal"
@@ -39,12 +38,12 @@ func NewServer() {
 	// 禁用控制台颜色
 	gin.DisableConsoleColor()
 	// 创建记录日志的文件
-	f, _ := os.Create("./logs/gin.log")
-	gin.DefaultWriter = io.MultiWriter(f)
+	//f, _ := os.Create("./logs/gin.log")
+	//gin.DefaultWriter = io.MultiWriter(f)
 	// 如果需要将日志同时写入文件和控制台，请使用以下代码
 	// gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 	// 默认中间件注册
-	engine.Use(gin.Logger())
+	//engine.Use(gin.Logger())
 	// 先开启release mode ，屏蔽掉gin默认的waring
 	gin.SetMode(gin.ReleaseMode)
 	if setting.Conf.App.Debug {
@@ -58,8 +57,6 @@ func NewServer() {
 			logger.Errorf("gops agent %s\n", err)
 		}
 		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
 	}
 	// 初始化http server
 	s := &http.Server{
