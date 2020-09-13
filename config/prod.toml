@@ -42,3 +42,8 @@ etcd_endpoints = "127.0.0.1:2379"
 etcd_user = "peanut"
 etcd_password = "123456"
 etcd_prefix = "/app/config/"
+
+[logger]
+encoding = "json"
+path = "./error.log"
+level = "debug"

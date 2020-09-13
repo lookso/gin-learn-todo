@@ -7,7 +7,7 @@
 package model
 
 import (
-	"gin-learn-todo/libs/mysql"
+	"gin-learn-todo/pkg/mysql"
 	"github.com/jinzhu/gorm"
 )
 

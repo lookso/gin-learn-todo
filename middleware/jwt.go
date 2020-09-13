@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"gin-learn-todo/libs/jwt"
+	"gin-learn-todo/pkg/jwt"
 	"gin-learn-todo/pkg/response"
 	"github.com/gin-gonic/gin"
 )

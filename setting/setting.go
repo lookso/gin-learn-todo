@@ -3,6 +3,7 @@ package setting
 import (
 	"flag"
 	"github.com/BurntSushi/toml"
+	"go.uber.org/zap"
 	"log"
 	"path/filepath"
 	"sync"
@@ -10,11 +11,11 @@ import (
 
 type tomlConf struct {
 	Title string
-
 	App    *app    `toml:"app"`
 	Mysql  *mysql  `toml:"mysql"`
 	Redis  *redis  `toml:"redis"`
 	Sentry *sentry `toml:"sentry"`
+	Logger *logger `toml:"logger"`
 }
 
 type app struct {
@@ -53,6 +54,15 @@ type redis struct {
 type sentry struct {
 	Env string `toml:env`
 	Dsn string `toml:"dsn"`
+}
+// Config 日志的可配置项
+type logger struct {
+	Level zap.AtomicLevel `json:"level"`
+	// Encoding json or console
+	Encoding string `json:"encoding,omitempty"`
+	// Path 输出目录，支持文件，stdout stderr 等
+	//Path []string `json:"outputs,omitempty"`
+	Path string `json:"path"`
 }
 
 // 所有配置

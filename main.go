@@ -8,9 +8,9 @@ package main
 
 import (
 	"gin-learn-todo/boot"
-	"gin-learn-todo/libs/etcd"
-	db "gin-learn-todo/libs/mysql"
-	"gin-learn-todo/libs/redis"
+	"gin-learn-todo/pkg/etcd"
+	db "gin-learn-todo/pkg/mysql"
+	"gin-learn-todo/pkg/redis"
 	"log"
 )
 

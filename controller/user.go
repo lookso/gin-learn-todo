@@ -3,10 +3,11 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"gin-learn-todo/libs/jwt"
-	"gin-learn-todo/libs/mysql"
-	"gin-learn-todo/libs/redis"
 	"gin-learn-todo/model"
+	"gin-learn-todo/pkg/jwt"
+	"gin-learn-todo/pkg/logger"
+	"gin-learn-todo/pkg/mysql"
+	"gin-learn-todo/pkg/redis"
 	"gin-learn-todo/pkg/response"
 	"gin-learn-todo/pkg/utils"
 	"gin-learn-todo/resource"
@@ -26,6 +27,7 @@ import (
 // @Param id path int true "用户id"
 // @Success 200 {object} model.User "用户详情"
 func Info(c *gin.Context) {
+	logger.Sugar().Infof("zap log test")
 	var err error
 	var user model.User
 	id := c.Query("id")
@@ -123,6 +125,7 @@ func UserInfo(c *gin.Context) {
 		Age:  28,
 	}))
 }
+
 // 更新token
 func Refresh(c *gin.Context) {
 	c.JSON(response.Data(nil))
