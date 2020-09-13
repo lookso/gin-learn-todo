@@ -9,26 +9,28 @@ package main
 import (
 	"gin-learn-todo/boot"
 	"gin-learn-todo/pkg/etcd"
+	"gin-learn-todo/pkg/log"
 	db "gin-learn-todo/pkg/mysql"
 	"gin-learn-todo/pkg/redis"
-	"log"
 )
 
 func main() {
+	log.Init()
+
 	if err := db.Init(); err != nil {
-		log.Fatalf("mysql.Init() error(%v)", err)
+		log.Sugar().Errorf("mysql.Init() error(%v)", err)
 		return
 	}
 	defer db.Close()
 
 	if err := redis.Init(); err != nil {
-		log.Fatalf("redis.Init() error(%v)", err)
+		log.Sugar().Errorf("redis.Init() error(%v)", err)
 		return
 	}
 	defer redis.Close()
 
 	if err := etcd.Init(); err != nil {
-		log.Fatalf("etcd.Init() error(%v)", err)
+		log.Sugar().Errorf("etcd.Init() error(%v)", err)
 		return
 	}
 

@@ -10,7 +10,7 @@ import (
 var logger *zap.Logger
 var sugar *zap.SugaredLogger
 
-func init() {
+func Init() {
 	hook := lumberjack.Logger{
 		Filename:   setting.Conf.Logger.Path, // 日志文件路径
 		MaxSize:    1024,                        // 每个日志文件保存的最大尺寸 单位：M
