@@ -25,6 +25,8 @@ func All(r *gin.Engine) {
 	})
 	// 注册路由
 	api(r)
-	docs(r)
 	test(r)
+	// 文档
+	docs(r)
+
 }
