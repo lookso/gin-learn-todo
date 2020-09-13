@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"gin-learn-todo/model"
 	"gin-learn-todo/pkg/jwt"
-	"gin-learn-todo/pkg/logger"
+	"gin-learn-todo/pkg/log"
 	"gin-learn-todo/pkg/mysql"
 	"gin-learn-todo/pkg/redis"
 	"gin-learn-todo/pkg/response"
 	"gin-learn-todo/pkg/utils"
 	"gin-learn-todo/resource"
 	"github.com/gin-gonic/gin"
-	"log"
 	"strconv"
 	"time"
 )
@@ -27,7 +26,7 @@ import (
 // @Param id path int true "用户id"
 // @Success 200 {object} model.User "用户详情"
 func Info(c *gin.Context) {
-	logger.Sugar().Infof("zap log test")
+	log.Sugar().Infof("zap log test")
 	var err error
 	var user model.User
 	id := c.Query("id")
@@ -43,12 +42,12 @@ func Info(c *gin.Context) {
 	var userStr string
 	userInfoKey := fmt.Sprintf(redis.SnsUserInfoKey, uid)
 	if userStr, err = redis.Client().Get(userInfoKey).Result(); err != nil && err != redis.ErrNil {
-		log.Fatalf("redis get key(%v) err: %v", userInfoKey, err)
+		log.Sugar().Errorf("redis get key(%v) err: %v", userInfoKey, err)
 	}
 	if userStr != "" {
 		err := json.Unmarshal([]byte(userStr), &user)
 		if err != nil {
-			log.Fatalf("JsonToStruct err:%v", err)
+			log.Sugar().Errorf("JsonToStruct err:%v", err)
 		}
 		c.JSON(response.Data(user))
 		return
@@ -60,7 +59,7 @@ func Info(c *gin.Context) {
 	var userByte []byte
 	userByte, err = json.Marshal(&user)
 	if err := redis.Client().Set(userInfoKey, string(userByte), time.Duration(10*60)*time.Second).Err(); err != nil {
-		log.Fatalf("redis set key(%v) err: %v", userInfoKey, err)
+		log.Sugar().Errorf("redis set key(%v) err: %v", userInfoKey, err)
 		return
 	}
 	c.JSON(response.Data(user))

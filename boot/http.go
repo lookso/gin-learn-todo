@@ -8,14 +8,15 @@ package boot
 
 import (
 	"context"
+	"gin-learn-todo/pkg/log"
 	"gin-learn-todo/routers"
 	"gin-learn-todo/setting"
 	"github.com/getsentry/sentry-go"
 	sentryGin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/google/gops/agent"
+	"go.uber.org/zap"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -27,7 +28,11 @@ import (
 
 var engine *gin.Engine
 
+var logger *zap.SugaredLogger
+
 func NewServer() {
+	// 初始化logger
+	initLogger()
 
 	engine = gin.New()
 	routers.All(engine)
@@ -45,12 +50,12 @@ func NewServer() {
 	if setting.Conf.App.Debug {
 		//pprof.Register(engine) // 性能分析工具 pprof和gops二选一
 		// debug 模式下开启gops
-		log.Printf("gops listen at %s", ":9000")
+		logger.Infof("gops listen at %s", ":9000")
 		if err := agent.Listen(agent.Options{
 			Addr:            ":9000",
 			ShutdownCleanup: true, // automatically closes on os.Interrupt
 		}); err != nil {
-			log.Printf("gops agent %s\n", err)
+			logger.Errorf("gops agent %s\n", err)
 		}
 		gin.SetMode(gin.DebugMode)
 	} else {
@@ -72,10 +77,10 @@ func NewServer() {
 		defer wg.Done()
 		// service connections
 		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+			logger.Errorf("listen: %s\n", err)
 		}
 	}()
-	log.Printf("http.server start success,listen.port%s", setting.Conf.App.Addr)
+	logger.Infof("http.server start success,listen.port%s", setting.Conf.App.Addr)
 	initSentry()
 	initPrometheus()
 
@@ -97,9 +102,9 @@ func Quit(s *http.Server) {
 	defer cancel()
 
 	if err := s.Shutdown(ctx); err != nil {
-		log.Fatal("server Shutdown error: ", err)
+		logger.Fatal("server Shutdown error: ", err)
 	}
-	log.Println("server exiting success")
+	logger.Infof("server exiting success")
 }
 
 func initSentry() {
@@ -108,14 +113,14 @@ func initSentry() {
 		setting.Conf.Sentry.Env = "test,prod"
 	}
 	if setting.Conf.Sentry.Dsn != "" && strings.Contains(setting.Conf.Sentry.Env, os.Getenv("ENV")) { // 启用sentry时
-		log.Println("sentry enabled")
+		logger.Infof("sentry enabled")
 		if err := sentry.Init(sentry.ClientOptions{
 			Dsn:              setting.Conf.Sentry.Dsn,
 			Debug:            setting.Conf.App.Debug,
 			AttachStacktrace: false,
 			Environment:      os.Getenv("ENV"),
 		}); err != nil {
-			log.Fatalf("sentry initialization failed: %v", err)
+			logger.Errorf("sentry initialization failed: %v", err)
 		}
 		// 启用sentry
 		engine.Use(gin.Recovery(), sentryGin.New(sentryGin.Options{Repanic: true}))
@@ -123,7 +128,7 @@ func initSentry() {
 		engine.Use(gin.Recovery())
 	}
 
-	log.Println("init sentry success")
+	logger.Infof("init sentry success")
 }
 
 func initPrometheus() {
@@ -131,3 +136,7 @@ func initPrometheus() {
 	p.Use(engine)
 }
 
+func initLogger() {
+	logger = log.Sugar()
+	logger.Info("logger init success")
+}

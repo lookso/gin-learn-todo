@@ -31,5 +31,6 @@ func main() {
 		log.Fatalf("etcd.Init() error(%v)", err)
 		return
 	}
+
 	boot.NewServer()
 }

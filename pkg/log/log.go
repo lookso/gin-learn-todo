@@ -1,4 +1,4 @@
-package logger
+package log
 
 import (
 	"gin-learn-todo/setting"
