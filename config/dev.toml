@@ -6,7 +6,6 @@ addr = ":8888"
 debug = true
 timezone = "PRC"
 env = "dev"
-
 # 业务appid
 app_id = "1"
 
@@ -38,7 +37,6 @@ write_timeout_millisecond = 100
 
 [etcd]
 app = "gin-learn-todo"
-env = "dev"
 etcd_endpoints = "127.0.0.1:2379"
 etcd_user = "peanut"
 etcd_password = "123456"

@@ -21,6 +21,8 @@ go get -u github.com/swaggo/swag/cmd/swag
 go get -u github.com/swaggo/gin-swagger
 go get -u github.com/swaggo/gin-swagger/swaggerFiles
 
+go run --tags=doc main.go
+http://127.0.0.1:8888/swagger/index.html
 ...
 在项目的根目录：windows下执行swag.exe init ，linux下执行swag init
 参考地址: https://blog.csdn.net/hjxzb/article/details/84899100

@@ -10,7 +10,7 @@ import (
 )
 
 type tomlConf struct {
-	Title string
+	Title  string
 	App    *app    `toml:"app"`
 	Mysql  *mysql  `toml:"mysql"`
 	Redis  *redis  `toml:"redis"`
@@ -24,6 +24,7 @@ type app struct {
 	// 时区格式：UTC、PRC、Asia/Calcutta 、Asia/Kolkata
 	Timezone string `toml:"timezone"`
 	AppId    string `toml:"app_id"`
+	Env      string `toml:"env"`
 }
 
 type mysql struct {
@@ -55,6 +56,7 @@ type sentry struct {
 	Env string `toml:env`
 	Dsn string `toml:"dsn"`
 }
+
 // Config 日志的可配置项
 type logger struct {
 	Level zap.AtomicLevel `json:"level"`
