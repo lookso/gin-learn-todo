@@ -33,6 +33,7 @@ func main() {
 		log.Sugar().Errorf("etcd.Init() error(%v)", err)
 		panic(err)
 	}
-
+	//go grpc.Run()
+	//go grpc.Gateway()
 	boot.NewServer()
 }
