@@ -18,20 +18,20 @@ func main() {
 	log.Init()
 
 	if err := db.Init(); err != nil {
-		log.Sugar().Errorf("mysql.Init() error(%v)", err)
-		return
+		log.Sugar().Errorf("db.Init() error(%v)", err)
+		panic(err)
 	}
 	defer db.Close()
 
 	if err := redis.Init(); err != nil {
 		log.Sugar().Errorf("redis.Init() error(%v)", err)
-		return
+		panic(err)
 	}
 	defer redis.Close()
 
 	if err := etcd.Init(); err != nil {
 		log.Sugar().Errorf("etcd.Init() error(%v)", err)
-		return
+		panic(err)
 	}
 
 	boot.NewServer()

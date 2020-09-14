@@ -1,10 +1,10 @@
 package mysql
 
 import (
+	"gin-learn-todo/pkg/log"
 	"gin-learn-todo/setting"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"log"
 	"time"
 )
 
@@ -16,7 +16,8 @@ var (
 func Init() (err error) {
 	db, err = gorm.Open("mysql", setting.Conf.Mysql.Sns.Addr)
 	if err != nil {
-		panic(err)
+		log.Sugar().Errorf("init mysql fail %v", err)
+		return err
 	}
 	db.DB().SetMaxIdleConns(setting.Conf.Mysql.Sns.MaxIdleConns)
 	db.DB().SetMaxOpenConns(setting.Conf.Mysql.Sns.MaxOpenConns)
@@ -26,7 +27,7 @@ func Init() (err error) {
 	if setting.Conf.App.Env == "dev" {
 		db.LogMode(true)
 	}
-	log.Printf("init mysql success")
+	log.Sugar().Info("init mysql success")
 	return nil
 }
 
