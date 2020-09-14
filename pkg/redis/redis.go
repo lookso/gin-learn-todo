@@ -1,9 +1,9 @@
 package redis
 
 import (
+	"gin-learn-todo/pkg/log"
 	"gin-learn-todo/setting"
 	"github.com/go-redis/redis"
-	"log"
 	"time"
 )
 
@@ -31,10 +31,10 @@ func Init() (err error) {
 	client = redis.NewClient(options)
 	_, err = client.Ping().Result()
 	if err != nil {
-		log.Fatalf("init redis err %s", err)
+		log.Sugar().Errorf("init redis err %s", err)
 		return err
 	}
-	log.Println("init redis success")
+	log.Sugar().Info("init redis success")
 	return nil
 }
 
