@@ -19,6 +19,7 @@ func Run() {
 	if err != nil {
 		log.Sugar().Fatalf("failed to listen: %v", err)
 	}
+	// 注册服务
 	proto.RegisterProdServer(rpcServer, new(services.ProdService))
 	proto.RegisterOrderServer(rpcServer, new(services.OrdersService))
 
