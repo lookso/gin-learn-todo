@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"flag"
-	gw "gin-learn-todo/pkg/grpc/proto"
+	"gin-learn-todo/pkg/grpc/proto"
 	"gin-learn-todo/pkg/log"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"golang.org/x/net/context"
@@ -14,18 +14,23 @@ var (
 	echoEndpoint = flag.String("echo_endpoint", "localhost:9192", "endpoint of Gateway")
 )
 
-func Gateway() error {
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
-	mux := runtime.NewServeMux()
-	opts := []grpc.DialOption{grpc.WithInsecure()}
-	err := gw.RegisterProductHandlerFromEndpoint(ctx, mux, *echoEndpoint, opts)
+func Gateway() {
+	gwMux := runtime.NewServeMux()
+	opt := []grpc.DialOption{grpc.WithInsecure()}
+	err := proto.RegisterProdHandlerFromEndpoint(context.Background(),
+		gwMux, *echoEndpoint, opt)
 	if err != nil {
-		return err
+		log.Sugar().Fatalf("grpc gateway register order-server err %v", err)
+	}
+	err = proto.RegisterOrderHandlerFromEndpoint(context.Background(),
+		gwMux, *echoEndpoint, opt)
+	if err != nil {
+		log.Sugar().Fatalf("grpc gateway register product-server err %v", err)
 	}
 
-	log.Sugar().Info("grpc gateway init success")
-	return http.ListenAndServe(":8080", mux)
+	httpServer := &http.Server{
+		Addr:    ":8080",
+		Handler: gwMux,
+	}
+	httpServer.ListenAndServe()
 }

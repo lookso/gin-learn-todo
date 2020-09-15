@@ -29,4 +29,4 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 
-replace google.golang.org/grpc v1.31.1 => google.golang.org/grpc v1.26.0
+replace google.golang.org/grpc v1.31.1 => google.golang.org/grpc v1.27.0

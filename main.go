@@ -8,7 +8,7 @@ package main
 
 import (
 	"gin-learn-todo/boot"
-	"gin-learn-todo/pkg/etcd"
+	"gin-learn-todo/pkg/grpc"
 	"gin-learn-todo/pkg/log"
 	db "gin-learn-todo/pkg/mysql"
 	"gin-learn-todo/pkg/redis"
@@ -29,11 +29,11 @@ func main() {
 	}
 	defer redis.Close()
 
-	if err := etcd.Init(); err != nil {
-		log.Sugar().Errorf("etcd.Init() error(%v)", err)
-		panic(err)
-	}
-	//go grpc.Run()
-	//go grpc.Gateway()
+	//if err := etcd.Init(); err != nil {
+	//	log.Sugar().Errorf("etcd.Init() error(%v)", err)
+	//	panic(err)
+	//}
+	go grpc.Run()
+	go grpc.Gateway()
 	boot.NewServer()
 }
