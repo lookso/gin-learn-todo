@@ -28,7 +28,6 @@ http://127.0.0.1:8888/swagger/index.html
 参考地址: https://blog.csdn.net/hjxzb/article/details/84899100
 go build -tags=doc
 ```
-
 #### Go-micro
 ```
 ```
@@ -46,12 +45,13 @@ go build -tags=doc
 
 ### todo list
 ```
-
-1.grpc grpc-getway
-2.etcd
-3.jwt
+1.grpc grpc-getway done
+2.etcd done
+3.jwt  done
 4.zinkin
 5.kong 鉴权,限流,降级
-6.
+6.gops   done
+7.swagger done
+8.
 ```
 
