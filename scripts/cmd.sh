@@ -1,1 +1,1 @@
-go test -v -count=1 ./grpc_client_test.go
+go test -v -count=1 -run=TestOrder ./grpc_client_test.go
