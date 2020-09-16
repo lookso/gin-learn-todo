@@ -7,16 +7,19 @@
 package main
 
 import (
+	"fmt"
 	"gin-learn-todo/boot"
 	"gin-learn-todo/pkg/grpc"
 	"gin-learn-todo/pkg/log"
 	db "gin-learn-todo/pkg/mysql"
 	"gin-learn-todo/pkg/redis"
+	"os"
 )
 
 func main() {
-	log.Init()
+	fmt.Println("current pid:", os.Getpid())
 
+	log.Init()
 	if err := db.Init(); err != nil {
 		log.Sugar().Errorf("db.Init() error(%v)", err)
 		panic(err)
@@ -36,4 +39,5 @@ func main() {
 	go grpc.Run()
 	go grpc.Gateway()
 	boot.NewServer()
+
 }
