@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"gin-learn-todo/middleware"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -23,6 +24,7 @@ func All(r *gin.Engine) {
 		})
 		return
 	})
+	r.Use(middleware.ZipKin())
 	// 注册路由
 	api(r)
 	test(r)

@@ -13,6 +13,7 @@ import (
 	"gin-learn-todo/pkg/log"
 	db "gin-learn-todo/pkg/mysql"
 	"gin-learn-todo/pkg/redis"
+	zk "gin-learn-todo/pkg/zipkin"
 	"os"
 )
 
@@ -20,6 +21,10 @@ func main() {
 	fmt.Println("current pid:", os.Getpid())
 
 	log.Init()
+	if err := zk.Init(); err != nil {
+		log.Sugar().Errorf("ZinKin.Init() error(%v)", err)
+		panic(err)
+	}
 	if err := db.Init(); err != nil {
 		log.Sugar().Errorf("db.Init() error(%v)", err)
 		panic(err)
