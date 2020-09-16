@@ -13,7 +13,7 @@ import (
 var (
 	echoEndpoint = flag.String("echo_endpoint", "localhost:9192", "endpoint of Gateway")
 )
-
+// 启用grpc gateway
 func Gateway() {
 	gwMux := runtime.NewServeMux()
 	opt := []grpc.DialOption{grpc.WithInsecure()}
