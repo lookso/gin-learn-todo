@@ -47,6 +47,11 @@ encoding = "json"
 path = "./error.log"
 level = "debug"
 
+[zipkin]
+service_name = "gin_zipkin_server"
+addr = "http://127.0.0.1:9411/api/v1/spans"
+recorder_addr = "127.0.0.1:9000"
+
 
 
 

@@ -1,16 +1,19 @@
-package scripts
+package client
 
 import (
 	"context"
 	"fmt"
 	"gin-learn-todo/pkg/grpc/proto"
+	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
+	"time"
+
+	//"github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
 	"log"
-	"testing"
 )
 
 const (
-	ADDRESS = ":9192"
+	GRpcAddress = ":9192"
 )
 
 var details = []*proto.OrderDetail{{
@@ -26,11 +29,20 @@ var om = &proto.OrderMain{
 	OrderDetails: details,
 }
 
-func TestOrder(t *testing.T) {
+func GRpcClient() {
+	ctx, cel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cel()
+
+	//tracer := opentracing.GlobalTracer() // 全局tracer
+	tracer, err := NewTracer()
+	if err != nil {
+		log.Println(err)
+	}
 	// 连接到 gRPC 服务器
-	conn, err := grpc.Dial(ADDRESS, grpc.WithInsecure())
+	conn, err := grpc.DialContext(ctx,GRpcAddress, grpc.WithInsecure(),grpc.WithUnaryInterceptor(otgrpc.OpenTracingClientInterceptor(tracer, otgrpc.LogPayloads())))
 	if err != nil {
 		log.Fatalf("connect error: %v", err)
+		panic(err)
 	}
 	defer conn.Close()
 

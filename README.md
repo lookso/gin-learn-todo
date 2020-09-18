@@ -55,3 +55,9 @@ go build -tags=doc
 8.
 ```
 
+### 单元测试
+```
+# grpc client 接入zipKin trace
+go test -v -count=1 -run=TestOrder ./client_test.go
+
+```

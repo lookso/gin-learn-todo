@@ -1,4 +1,4 @@
-package zipkin
+package trace
 
 import (
 	"gin-learn-todo/pkg/log"
@@ -11,11 +11,17 @@ import (
 // 第一步: 开一个全局变量
 var ZkTracer opentracing.Tracer
 
-func Init() error {
+const (
+	ServerName             = "ZpKin_Server"
+	ZipKinHttpEndPoint     = "http://127.0.0.1:9411/api/v1/spans"
+	ZipKinRecorderHostPort = "127.0.0.1:80"
+)
+
+func NewTrace() error {
 	// 第二步: 初始化 tracer
-	reporter := zkHttp.NewReporter("http://localhost:9411/api/v2/spans")
+	reporter := zkHttp.NewReporter(ZipKinHttpEndPoint)
 	defer reporter.Close()
-	endpoint, err := zipkin.NewEndpoint("gin-zin-server", "localhost:80")
+	endpoint, err := zipkin.NewEndpoint(ServerName, ZipKinRecorderHostPort)
 	if err != nil {
 		log.Sugar().Fatalf("unable to create local endpoint: %+v\n", err)
 		return err
@@ -27,5 +33,6 @@ func Init() error {
 	}
 	ZkTracer = zkOt.Wrap(nativeTracer)
 	opentracing.SetGlobalTracer(ZkTracer)
+	log.Sugar().Info("ZipKin init success")
 	return nil
 }

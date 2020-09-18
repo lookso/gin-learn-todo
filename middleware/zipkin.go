@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	zk "gin-learn-todo/pkg/zipkin"
+	zk "gin-learn-todo/pkg/trace"
 	"github.com/gin-gonic/gin"
 )
 
