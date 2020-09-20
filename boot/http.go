@@ -31,7 +31,7 @@ func NewServer() {
 	engine = gin.New()
 	routers.All(engine)
 	// 禁用控制台颜色
-	gin.DisableConsoleColor()
+	//gin.DisableConsoleColor()
 	// 创建记录日志的文件
 	//f, _ := os.Create("./logs/gin.log")
 	//gin.DefaultWriter = io.MultiWriter(f)

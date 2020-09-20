@@ -27,7 +27,7 @@ func NewTrace() (zkTracer opentracing.Tracer, err error) {
 	}
 
 	// initialize our tracer
-	nativeTracer, err := zipkin.NewTracer(reporter, zipkin.WithLocalEndpoint(endpoint))
+	nativeTracer, err := zipkin.NewTracer(reporter, zipkin.WithLocalEndpoint(endpoint), zipkin.WithTraceID128Bit(true))
 	if err != nil {
 		log.Sugar().Fatalf("unable to create tracer: %+v\n", err)
 		return nil, err
