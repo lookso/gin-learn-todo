@@ -6,33 +6,38 @@ import (
 	zkOt "github.com/openzipkin-contrib/zipkin-go-opentracing"
 	"github.com/openzipkin/zipkin-go"
 	zkHttp "github.com/openzipkin/zipkin-go/reporter/http"
+	"time"
 )
-
-// 第一步: 开一个全局变量
-var ZkTracer opentracing.Tracer
 
 const (
-	ServerName             = "ZpKin_Server"
-	ZipKinHttpEndPoint     = "http://127.0.0.1:9411/api/v1/spans"
-	ZipKinRecorderHostPort = "127.0.0.1:80"
+	ServerName         = "zipkin_grpc_server"
+	ZKHttpEndPoint     = "http://127.0.0.1:9411/api/v1/spans"
+	ZKRecorderHostPort = "127.0.0.1:80"
 )
 
-func NewTrace() error {
-	// 第二步: 初始化 tracer
-	reporter := zkHttp.NewReporter(ZipKinHttpEndPoint)
+func NewTrace() (zkTracer opentracing.Tracer, err error) {
+	reporter := zkHttp.NewReporter(ZKHttpEndPoint, zkHttp.Timeout(time.Duration(5*time.Second)))
 	defer reporter.Close()
-	endpoint, err := zipkin.NewEndpoint(ServerName, ZipKinRecorderHostPort)
+
+	// create our local service endpoint
+	endpoint, err := zipkin.NewEndpoint(ServerName, ZKRecorderHostPort)
 	if err != nil {
 		log.Sugar().Fatalf("unable to create local endpoint: %+v\n", err)
-		return err
+		return nil, err
 	}
+
+	// initialize our tracer
 	nativeTracer, err := zipkin.NewTracer(reporter, zipkin.WithLocalEndpoint(endpoint))
 	if err != nil {
 		log.Sugar().Fatalf("unable to create tracer: %+v\n", err)
-		return err
+		return nil, err
 	}
-	ZkTracer = zkOt.Wrap(nativeTracer)
-	opentracing.SetGlobalTracer(ZkTracer)
+
+	// use zipkin-go-opentracing to wrap our tracer
+	zkTracer = zkOt.Wrap(nativeTracer)
+
+	// optionally set as Global OpenTracing tracer instance
+	opentracing.InitGlobalTracer(zkTracer)
 	log.Sugar().Info("ZipKin init success")
-	return nil
+	return zkTracer, nil
 }

@@ -13,7 +13,6 @@ import (
 	"gin-learn-todo/pkg/log"
 	db "gin-learn-todo/pkg/mysql"
 	"gin-learn-todo/pkg/redis"
-	"gin-learn-todo/pkg/trace"
 	"os"
 )
 
@@ -22,18 +21,18 @@ func main() {
 
 	log.Init()
 
-	if err := trace.NewTrace(); err != nil {
-		log.Sugar().Errorf("ZinKin.Init() error(%v)", err)
-		panic(err)
-	}
+	//if err := trace.NewTrace(); err != nil {
+	//	log.Sugar().Errorf("ZinKin init error(%v)", err)
+	//	panic(err)
+	//}
 	if err := db.Init(); err != nil {
-		log.Sugar().Errorf("db.Init() error(%v)", err)
+		log.Sugar().Errorf("db init error(%v)", err)
 		panic(err)
 	}
 	defer db.Close()
 
 	if err := redis.Init(); err != nil {
-		log.Sugar().Errorf("redis.Init() error(%v)", err)
+		log.Sugar().Errorf("redis init error(%v)", err)
 		panic(err)
 	}
 	defer redis.Close()

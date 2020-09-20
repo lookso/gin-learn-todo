@@ -9,12 +9,12 @@ import (
 )
 
 const (
-	ServerName             = "ZpKin_GRpc_Client"
+	ServerName             = "zipkin_grpc_server"
 	ZipKinHttpEndPoint     = "http://127.0.0.1:9411/api/v1/spans"
 	ZipKinRecorderHostPort = "127.0.0.1:80"
 )
 
-func NewTracer() (opentracing.Tracer, error) {
+func NewTrace() (opentracing.Tracer, error) {
 
 	reporter := zkHttp.NewReporter(ZipKinHttpEndPoint)
 	defer reporter.Close()
@@ -23,12 +23,14 @@ func NewTracer() (opentracing.Tracer, error) {
 	endpoint, err := zipkin.NewEndpoint(ServerName, ZipKinRecorderHostPort)
 	if err != nil {
 		log.Fatalf("unable to create local endpoint: %+v\n", err)
+		return nil, err
 	}
 
 	// initialize our tracer
 	nativeTracer, err := zipkin.NewTracer(reporter, zipkin.WithLocalEndpoint(endpoint))
 	if err != nil {
 		log.Fatalf("unable to create tracer: %+v\n", err)
+		return nil, err
 	}
 
 	// use zipkin-go-opentracing to wrap our tracer

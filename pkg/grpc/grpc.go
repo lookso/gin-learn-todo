@@ -4,6 +4,8 @@ import (
 	"gin-learn-todo/pkg/grpc/proto"
 	"gin-learn-todo/pkg/grpc/services"
 	"gin-learn-todo/pkg/log"
+	"gin-learn-todo/pkg/trace"
+	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
 	"google.golang.org/grpc"
 	"net"
 )
@@ -13,8 +15,12 @@ const (
 )
 
 func Run() {
-
-	rpcServer := grpc.NewServer()
+	zkTracer, err := trace.NewTrace()
+	if err != nil {
+		log.Sugar().Fatalf("zipkin trace: %v", err)
+	}
+	// grpc_middleware 、grpc_recover
+	rpcServer := grpc.NewServer(grpc.UnaryInterceptor(otgrpc.OpenTracingServerInterceptor(zkTracer, otgrpc.LogPayloads())))
 	lis, err := net.Listen("tcp", PORT)
 	if err != nil {
 		log.Sugar().Fatalf("failed to listen: %v", err)
