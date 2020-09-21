@@ -26,7 +26,7 @@ import (
 // @Param id path int true "用户id"
 // @Success 200 {object} model.User "用户详情"
 func Info(c *gin.Context) {
-	log.Sugar().Infof("zap log test")
+	log.Sugar().Errorf("zap log test")
 	var err error
 	var user model.User
 	id := c.Query("id")
