@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var cli *clientv3.Client
+var Cli *clientv3.Client
 
 var (
 	LeaseKeepAliveFail = errors.New("lease keepAlive fail")
@@ -15,8 +15,8 @@ var (
 
 func Init() error {
 	var err error
-	cli, err = clientv3.New(clientv3.Config{
-		Endpoints:   []string{"localhost:32777", "localhost:32775", "localhost:32779"},
+	Cli, err = clientv3.New(clientv3.Config{
+		Endpoints:   []string{"localhost:12379", "localhost:22379", "localhost:32379"},
 		DialTimeout: 5 * time.Second,
 	})
 	if err != nil {
@@ -27,8 +27,8 @@ func Init() error {
 	log.Sugar().Info("init etcd success")
 	return nil
 }
-func mustInit() error {
-	if cli == nil {
+func MustInit() error {
+	if Cli == nil {
 		return errors.New("config is not init")
 	}
 	return nil

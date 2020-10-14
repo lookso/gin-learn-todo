@@ -23,4 +23,9 @@ func api(r *gin.Engine) {
 		api.GET("/user/info", controller.Info)
 		api.GET("/user/list", controller.List)
 	}
+	config := r.Group("/api/v1")
+	{
+		config.GET("/config/set", controller.SetConfig)
+		config.GET("/config/get", controller.GetConfig)
+	}
 }
