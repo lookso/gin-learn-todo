@@ -1,35 +1,35 @@
 package etcd
 
-//import (
-//	"errors"
-//	"gin-learn-todo/pkg/log"
-//	"go.etcd.io/etcd/clientv3"
-//	"time"
-//)
-//
-//var cli *clientv3.Client
-//
-//var (
-//	LeaseKeepAliveFail = errors.New("lease keepAlive fail")
-//)
-//
-//func Init() error {
-//	var err error
-//	cli, err = clientv3.New(clientv3.Config{
-//		Endpoints:   []string{"localhost:2379", "localhost:22379", "localhost:32379"},
-//		DialTimeout: 5 * time.Second,
-//	})
-//	if err != nil {
-//		log.Sugar().Fatalf("init etcd err %s", err)
-//		return err
-//	}
-//	// 建立客户端成功
-//	log.Sugar().Info("init etcd success")
-//	return nil
-//}
-//func mustInit() error {
-//	if cli == nil {
-//		return errors.New("config is not init")
-//	}
-//	return nil
-//}
+import (
+	"errors"
+	"gin-learn-todo/pkg/log"
+	"go.etcd.io/etcd/clientv3"
+	"time"
+)
+
+var cli *clientv3.Client
+
+var (
+	LeaseKeepAliveFail = errors.New("lease keepAlive fail")
+)
+
+func Init() error {
+	var err error
+	cli, err = clientv3.New(clientv3.Config{
+		Endpoints:   []string{"localhost:32777", "localhost:32775", "localhost:32779"},
+		DialTimeout: 5 * time.Second,
+	})
+	if err != nil {
+		log.Sugar().Fatalf("init etcd err %s", err)
+		return err
+	}
+	// 建立客户端成功
+	log.Sugar().Info("init etcd success")
+	return nil
+}
+func mustInit() error {
+	if cli == nil {
+		return errors.New("config is not init")
+	}
+	return nil
+}

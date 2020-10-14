@@ -15,6 +15,8 @@ import (
 	sentryGin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/google/gops/agent"
+	"github.com/google/uuid"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 	"os"
 	"os/signal"
@@ -53,6 +55,15 @@ func NewServer() {
 		}
 		gin.SetMode(gin.DebugMode)
 	}
+	engine.Use(func(c *gin.Context) {
+		id := c.GetHeader("x-request-id")
+		if id == "" {
+			id = uuid.New().String()
+		}
+		c.Header("X-Request-ID", id)
+		c.Set("x-request-id", id)
+		c.Set("logger", log.Sugar().With("x-request-id", id))
+	})
 	// 初始化http server
 	s := &http.Server{
 		Addr:              setting.Conf.App.Addr,
@@ -124,7 +135,19 @@ func initSentry() {
 }
 
 func initPrometheus() {
+	// 启动metrics收集服务
+	metricsServer := http.Server{
+		Addr:    ":9001",
+		Handler: promhttp.Handler(),
+	}
+	http.HandleFunc("/metrics", HandlerPrometheus())
+	go func() {
+		log.Sugar().Debug("metrics Server listen at :9001")
+		// service connections
+		if err := metricsServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Sugar().Fatalf("listen: %s\n", err)
+		}
+	}()
 	p := NewPrometheus("gin")
 	p.Use(engine)
 }
-

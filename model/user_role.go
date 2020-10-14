@@ -7,7 +7,7 @@
 package model
 
 import (
-	"gin-learn-todo/pkg/mysql"
+	"gin-learn-todo/pkg/db"
 	"github.com/jinzhu/gorm"
 )
 
@@ -23,7 +23,7 @@ type UserRole struct {
 
 func (ur *UserRole) GetRolesByEmail(appId string, email string) ([]UserRole, error) {
 	var userRoleList []UserRole
-	err := mysql.Client().Where("app_id=? and status=1 and email=?", appId, email).Find(&userRoleList).Error
+	err := db.Read().Where("app_id=? and status=1 and email=?", appId, email).Find(&userRoleList).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func Verifier(appId, email, path, method string) (bool, error) {
 		RoleId int
 	}
 	var result []Result
-	err = mysql.Client().Raw("select r.`app_id`,`method`,`path`,role_id from resources_roles rs left join resources  r on r.id=rs.resource_id "+
+	err = db.Read().Raw("select r.`app_id`,`method`,`path`,role_id from resources_roles rs left join resources  r on r.id=rs.resource_id "+
 		"where role_id in(?) and r.app_id=? and r.status=1 and rs.app_id=? and rs.status=1 and path=? and method=?", roleIds, appId, appId, path, method).Scan(&result).Error
 	if err != nil {
 		return false, err

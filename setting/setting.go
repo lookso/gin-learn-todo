@@ -12,7 +12,7 @@ import (
 type tomlConf struct {
 	Title  string
 	App    *app    `toml:"app"`
-	Mysql  *mysql  `toml:"mysql"`
+	Db     *db     `toml:"db"`
 	Redis  *redis  `toml:"redis"`
 	Sentry *sentry `toml:"sentry"`
 	Logger *logger `toml:"logger"`
@@ -27,14 +27,18 @@ type app struct {
 	Env      string `toml:"env"`
 }
 
-type mysql struct {
-	Sns *dbConf
+type db struct {
+	Default  string                    `toml:"default"` // 默认集群
+	Clusters map[string]ClustersConfig `json:"clusters" toml:"clusters"`
 }
-
-type dbConf struct {
-	Addr         string `toml:"addr"`           // 连接信息
-	MaxOpenConns int    `toml:"max_open_conns"` // 用于设置最大打开的连接数，默认值为0表示不限制
-	MaxIdleConns int    `toml:"max_idle_conns"` // 用于设置闲置的连接数
+type ClustersConfig struct {
+	Master Endpoint   `toml:"master"`
+	Slaves []Endpoint `toml:"slaves"`
+}
+type Endpoint struct {
+	Dns          string `toml:"dns"`
+	MaxOpenConns int    `toml:"max_open_conns"`
+	MaxIdleConns int    `toml:"max_idle_conns"`
 	MaxLifeTime  int    `toml:"max_life_time"`
 }
 

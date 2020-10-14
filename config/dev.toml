@@ -13,12 +13,26 @@ app_id = "1"
 env = "test,prod"
 dsn = "http://4f8175c96d4c439abaa7337f52ff5927@sentry.itech8.run/2"
 
-[mysql]
-[mysql.sns]
-addr = "root:123456@tcp(127.0.0.1:3306)/sns?parseTime=true&loc=Local&charset=utf8"
+# mysql 集群 支持集群一主多从
+[db]
+default="sns"   # 默认集群
+[db.clusters.sns.master]
+dns = "root:123456@tcp(127.0.0.1:3306)/sns?parseTime=true&loc=Local&charset=utf8"
 max_open_conns = 3
 max_idle_conns = 2
-max_life_time = 3600
+max_life_time = 10
+#[[db.clusters.sns.slaves]]
+#addr = "root:123456@tcp(127.0.0.1:3306)/sns?parseTime=true&loc=Local&charset=utf8"
+#max_open_conns = 3
+#max_idle_conns = 2
+#max_life_time = 10
+
+#[db.clusters.tools.master]
+#dns = "root:123456@tcp(127.0.0.1:3306)/tools?parseTime=true&loc=Local&charset=utf8"
+#max_open_conns = 3
+#max_idle_conns = 2
+#max_life_time = 10
+#[[db.clusters.tools.slaves]]
 
 
 [redis]

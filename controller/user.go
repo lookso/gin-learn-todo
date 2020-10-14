@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"gin-learn-todo/model"
+	"gin-learn-todo/pkg/db"
 	"gin-learn-todo/pkg/jwt"
 	"gin-learn-todo/pkg/log"
-	"gin-learn-todo/pkg/mysql"
 	"gin-learn-todo/pkg/redis"
 	"gin-learn-todo/pkg/response"
 	"gin-learn-todo/pkg/utils"
@@ -52,7 +52,7 @@ func Info(c *gin.Context) {
 		c.JSON(response.Data(user))
 		return
 	}
-	if err = mysql.Client().Where("id=? and status=1", uid).First(&user).Error; err != nil {
+	if err = db.Read().Where("id=? and status=1", uid).First(&user).Error; err != nil {
 		c.AbortWithStatusJSON(response.ParamsError("数据不存在"))
 		return
 	}
@@ -76,12 +76,12 @@ func Info(c *gin.Context) {
 func List(c *gin.Context) {
 	var err error
 	var users []model.User
-	if err = mysql.Client().Where("status=1").Find(&users).Error; err != nil {
+	if err = db.Read().Where("status=1").Find(&users).Error; err != nil {
 		c.AbortWithStatusJSON(response.ParamsError("数据不存在"))
 		return
 	}
 	var count int32
-	if err = mysql.Client().Model(&model.User{}).
+	if err = db.Read().Model(&model.User{}).
 		Where("status=1").Count(&count).Error; err != nil {
 		c.AbortWithStatusJSON(response.ParamsError("获取总数失败"))
 		return
