@@ -34,7 +34,21 @@ func SetConfig(c *gin.Context) {
 	return
 }
 
+type GetConfReq struct {
+	Name string `json:"name"`
+}
+
 func GetConfig(c *gin.Context) {
+	getConfReq := new(GetConfReq)
+	if err := c.Bind(getConfReq); err != nil {
+		c.AbortWithStatusJSON(response.ServerError(""))
+		return
+	}
+	if getConfReq.Name==""{
+		c.AbortWithStatusJSON(response.ParamsError(""))
+		return
+	}
+
 	if err := etcd.MustInit(); err != nil {
 		c.AbortWithStatusJSON(response.ServerError(""))
 		return
